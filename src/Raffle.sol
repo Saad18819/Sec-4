@@ -4,13 +4,19 @@ pragma solidity 0.8.19;
 
 // we will be working with specific sets of contract that works best with 0.8.19
 
+
+
 /**
  * @title a sample raffle contract
  * @author Saad Khan
  * @notice This contract is for creating a sample raffle
  * @dev Implements Chainlink VRFv2.5
  */
-contract Raffle{
+
+
+import {VRFV2PlusWrapperConsumerBase} from "@chainlink/contracts@1.5.0/src/v0.8/vrf/dev/VRFV2PlusWrapperConsumerBase.sol";
+
+contract Raffle is VRFV2PlusWrapperConsumerBase{
 
     error Raffle_SendMoreToEnterRaffle();
 
@@ -84,6 +90,10 @@ emit RaffleEntered(msg.sender);
 getting random num on blockchain is quite difficult the main reason is the deterministic system...so to get it we gonna work with VRf chainlink 
 getting random no is a two transaction process first we have to mae a transaction to request random num generator and in a second transaction the chainlink oracle will actually sends us or add some random num on chain
 
+for above code we just went to chainlibk vrf on google and copy pasted it and then u gotta be exporting that thing as well by opening that code in remix and then just copy paste the export thing
+and uk just export thing doest work well in foundry coz ut cant extract it so we gotta be downloading chainlink brownie contract in our liubrary
+"forge install smartcontractkit/chainlink-evm@contracts-v<version>"
+and then u gotta do remapping in foundry.toml
 
 
  */
