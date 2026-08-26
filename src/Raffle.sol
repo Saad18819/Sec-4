@@ -1,0 +1,188 @@
+// SPDX-License-Identifier:MIT
+
+pragma solidity 0.8.19;
+
+// we will be working with specific sets of contract that works best with 0.8.19
+
+/**
+ * @title a sample raffle contract
+ * @author Saad Khan
+ * @notice This contract is for creating a sample raffle
+ * @dev Implements Chainlink VRFv2.5
+ */
+contract Raffle{
+
+    error Raffle_SendMoreToEnterRaffle();
+
+uint256 private immutable i_entranceFee;
+// @dev THe duration of the lottery in seconds
+uint256 private immutable i_interval;
+uint256 private s_lastTimeStamp;
+address payable[] private s_players; 
+// s implies storage variable adn we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
+// payable means see after winning the raffle that address need to be paid so without oayable u wont be able to pay that address broooo
+// whenever a contract has to pick someone from storage and push money to them, you need a payable array
+
+
+/*EVENTS */
+
+event RaffleEntered(address indexed player);
+
+
+constructor(uint256 entranceFee,uint256 Interval){
+    i_entranceFee = entranceFee;
+    i_interval = interval;
+    s_lastTimeStamp = block.timestamp;
+}
+
+
+
+    function enterRaffle() external payable{
+// require(msg.value >= i_entranceFee,"Not enough ETH sent");
+// require is gas expenisve coz u storing string so best is to use custom errors
+
+// another method is using errors and the most gas efficient method
+
+
+if(msg.value <= i_entranceFee){
+    revert  Raffle_SendMoreToEnterRaffle();
+}
+
+// another crazy method is using error and require withut using string
+// require(msg.value >= i_entranceFee , SendMoreToEnterRaffle());
+// but above one only runs with specific version of solidity and compiler version so not a good option 
+
+s_players.push(payable(msg.sender));
+// in solidity  it does not automatically convert a standard address into an address payable without explicitally mentioning it
+
+emit RaffleEntered(msg.sender);
+    }
+
+
+
+
+
+    function pickWinner() external{
+
+ if((block.timestamp - s_lastTimeStamp) > i_interval){
+    revert();
+ }
+
+ uint256 requestID = s_vrfCoordinator.requestRandomWords(VRFV2PlusClient.RandomWordsRequest({
+    keyHash: keyHash,
+    subId: subId,
+    requestConfirmations: requestConfirmations,
+    callbackGasLimit: callbackGasLimit,
+    numWords: numWords,
+    extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: true})) // new parameter
+  })
+);
+
+    }
+
+/*
+getting random num on blockchain is quite difficult the main reason is the deterministic system...so to get it we gonna work with VRf chainlink 
+getting random no is a two transaction process first we have to mae a transaction to request random num generator and in a second transaction the chainlink oracle will actually sends us or add some random num on chain
+
+
+
+ */
+
+
+
+
+
+    function getEntranceFee() external view returns(uint256){
+        return i_entranceFee;
+    }
+
+
+
+
+
+
+
+
+}
+
+
+/*
+LEARNING
+
+NatSpec (Ethereum Natural Language Specification Format) is a standardized documentation system used in Smart Contract development (primarily Solidity and Vyper). Inspired by Doxygen, it allows developers to write human-readable annotations directly above contracts, functions, events, state variables, and errors.
+basically short me intro dena what we are actually building
+
+
+SOLIDITY STYLE GUIDE to make it look professional
+
+1.pragma statements
+2.import statements
+3.interfaces
+4.libraries
+5.contracts
+
+inside each contracts the method is
+
+1.Type declarations
+2.State variables
+3. Events
+4. Modifiers
+5. Functions
+
+INSIDE FUNCTIONS
+
+1.constructor
+2.receive function (if exists)
+3.fallback function (if exists)
+4.external
+5.public
+6.internal
+7.private
+8.view & pure functions
+ */
+
+
+
+
+
+
+/*
+EVENTS AND TOPIC EXPLANATIONS
+
+1. What is an Event?
+An event is a way for a smart contract to send a signal or message to the outside world (like your front-end web app or an off-chain database).
+
+When something important happens in your contract (e.g., a user joins a raffle), the contract "emits" an event.
+
+This creates a permanent log entry stored in the blockchain’s special log data structure.
+
+
+2. What is a Topic?
+A topic is simply an indexed parameter inside an event.
+
+When you mark a variable as indexed inside an event definition, the Ethereum Virtual Machine (EVM) saves it in a special searchable index table (called topics) separate from the regular log data.
+
+You can have a maximum of 3 indexed parameters (topics) per event because creating these search indexes costs extra gas.
+
+
+. Why Use Them?
+Why use Events? Smart contracts are blind and deaf to the outside world—they can't talk directly to your website UI. Events act as a bridge, allowing dApps (decentralized apps) to "listen" to what the contract is doing in real time.
+
+Why use Topics (Indexing)? Without topics, searching through blockchain history is like searching for a needle in a haystack—an external app would have to download and read every single log one by one. Topics turn your logs into a searchable database so apps can find specific data instantly.
+
+
+
+When to Use Them?
+Use Events when:
+
+You modify the state of the contract (like recording a user entry, changing a price, or transferring ownership) and want to notify off-chain applications that it happened.
+
+Use Topics (Indexing) when:
+
+You expect your front-end application or users to search, filter, or query historical data based on that specific parameter (e.g., “Show me all raffle entries made specifically by wallet address 0x123...” or “Show me every time the exchange rate changed to X”).
+
+
+
+
+
+ */
