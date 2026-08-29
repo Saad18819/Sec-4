@@ -14,7 +14,8 @@ pragma solidity 0.8.19;
  */
 
 
-import {VRFV2PlusWrapperConsumerBase} from "@chainlink/contracts@1.5.0/src/v0.8/vrf/dev/VRFV2PlusWrapperConsumerBase.sol";
+import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
+import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
 contract Raffle is VRFV2PlusWrapperConsumerBase{
 
@@ -29,16 +30,23 @@ address payable[] private s_players;
 // payable means see after winning the raffle that address need to be paid so without oayable u wont be able to pay that address broooo
 // whenever a contract has to pick someone from storage and push money to them, you need a payable array
 
+bytes32 private immutable i_keyHash;
+uint256 private immutable i_subscriptionId;
+uint16 private constant REQUEST_CONFIRMATION = 3;
+
 
 /*EVENTS */
 
 event RaffleEntered(address indexed player);
 
 
-constructor(uint256 entranceFee,uint256 Interval){
+constructor(uint256 entranceFee,uint256 Interval , address vrfCoordinator , bytes32 gasLane , uint256 subscriptionId) VRFConsumerBaseV2Plus(vrfCoordinator){
     i_entranceFee = entranceFee;
     i_interval = interval;
     s_lastTimeStamp = block.timestamp;
+    s_vrfCoordinator.requestRandomWords(); //  s_vrfCoordinator is a state variable in VRF consumer base code but since we have inherited the code we can use this state bvaribale directly which is really really coool
+    i_keyHash = gasLane;
+    i_subscriptionId = subscriptionId;
 }
 
 
@@ -74,15 +82,19 @@ emit RaffleEntered(msg.sender);
     revert();
  }
 
+
+
  uint256 requestID = s_vrfCoordinator.requestRandomWords(VRFV2PlusClient.RandomWordsRequest({
-    keyHash: keyHash,
-    subId: subId,
-    requestConfirmations: requestConfirmations,
+    keyHash: i_keyHash, // max gas price you are willing to pay for a request in wei
+    subId: i_subscriptionId,
+    requestConfirmations: REQUEST_CONFIRMATION, // how many confirmations chainlink nodes shd wait before responding like after u send a request it will wait X number of block before trying to give you a random number
     callbackGasLimit: callbackGasLimit,
     numWords: numWords,
     extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: true})) // new parameter
   })
 );
+
+
 
     }
 
@@ -92,8 +104,11 @@ getting random no is a two transaction process first we have to mae a transactio
 
 for above code we just went to chainlibk vrf on google and copy pasted it and then u gotta be exporting that thing as well by opening that code in remix and then just copy paste the export thing
 and uk just export thing doest work well in foundry coz ut cant extract it so we gotta be downloading chainlink brownie contract in our liubrary
-"forge install smartcontractkit/chainlink-evm@contracts-v<version>"
+
 and then u gotta do remapping in foundry.toml
+
+also like what we imported is that in lib => brownie contracts => vrf => dev => VRFConsumerBaseV2Plus.sol is actually inhrited and it has constructor in it
+and the important thing is if you inherit a contract that has a constructor like this what you need to do is in ur constructor u need to add that contracts constructor
 
 
  */
