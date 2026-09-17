@@ -4,7 +4,12 @@ pragma solidity 0.8.19;
 
 // we will be working with specific sets of contract that works best with 0.8.19
 
+/*
+basically the PROJECT IS LIKE A LOTTERY SYSTEM like people gonna buy the tickets or tokens whatever
+and then the system will generate a random number which will automatically selects the winner
 
+
+ */
 
 /** 
  * @title a sample raffle contract
@@ -50,17 +55,18 @@ constructor(uint256 entranceFee,uint256 Interval , address vrfCoordinator , byte
 }
 
 
-
+// function abt how people should be able to enter raffle
     function enterRaffle() external payable{
+
 // require(msg.value >= i_entranceFee,"Not enough ETH sent");
 // require is gas expenisve coz u storing string so best is to use custom errors
 
+
 // another method is using errors and the most gas efficient method
-
-
 if(msg.value <= i_entranceFee){
     revert  Raffle_SendMoreToEnterRaffle();
 }
+
 
 // another crazy method is using error and require withut using string
 // require(msg.value >= i_entranceFee , SendMoreToEnterRaffle());
@@ -138,6 +144,7 @@ NatSpec (Ethereum Natural Language Specification Format) is a standardized docum
 basically short me intro dena what we are actually building
 
 
+
 SOLIDITY STYLE GUIDE to make it look professional
 
 1.pragma statements
@@ -148,11 +155,15 @@ SOLIDITY STYLE GUIDE to make it look professional
 
 inside each contracts the method is
 
-1.Type declarations
-2.State variables
-3. Events
-4. Modifiers
-5. Functions
+// version
+// imports
+// errors
+// interfaces, libraries, contracts
+// Type declarations
+// State variables
+// Events
+// Modifiers
+// Functions
 
 INSIDE FUNCTIONS
 
