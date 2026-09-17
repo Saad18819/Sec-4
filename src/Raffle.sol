@@ -6,7 +6,7 @@ pragma solidity 0.8.19;
 
 
 
-/**
+/** 
  * @title a sample raffle contract
  * @author Saad Khan
  * @notice This contract is for creating a sample raffle
