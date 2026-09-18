@@ -126,7 +126,7 @@ basically in lib/chainlink/contracts/vrf/dev/libraries we have VRF COORDINATOR V
 
 in chainlink docs we have the explanation of keyhash and other things blah blah
 keyhash is the max amnt of gas so we telling it upfront thats why we used it in constructor as well
-
+we also add subscriptio ID into the constructor so your contracts knows which chainlink accnt to charge for randomness
  */
 
 
