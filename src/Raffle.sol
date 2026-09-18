@@ -50,7 +50,7 @@ event RaffleEntered(address indexed player);
 
 constructor(uint256 entranceFee,uint256 Interval , address vrfCoordinator , bytes32 gasLane , uint256 subscriptionId) VRFConsumerBaseV2Plus(vrfCoordinator){
     i_entranceFee = entranceFee;
-    i_interval = interval;
+    i_interval = interval; // so later on it would be easy for us to check how much time has passed to generate a random num
     s_lastTimeStamp = block.timestamp;
     s_vrfCoordinator.requestRandomWords(); //  s_vrfCoordinator is a state variable in VRF consumer base code but since we have inherited the code we can use this state bvaribale directly which is really really coool
     i_keyHash = gasLane;
@@ -99,7 +99,8 @@ Storing historical data in Event Logs is drastically cheaper on gas.
 
     function pickWinner() external{
 
- if((block.timestamp - s_lastTimeStamp) > i_interval){
+// to pick a random num first we have to make sure enough time has passsed since the start of lottery
+ if((block.timestamp - s_lastTimeStamp) < i_interval){
     revert();
  }
 
