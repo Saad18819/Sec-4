@@ -22,7 +22,9 @@ and then the system will generate a random number which will automatically selec
 import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
-contract Raffle is VRFV2PlusWrapperConsumerBase{
+
+// in lib smart brownie contract go to src/vrf/dev/VRFConsumerBaseV2Plus.sol this what we are inheriting
+contract Raffle is VRFConsumerBaseV2Plus{
 
     error Raffle_SendMoreToEnterRaffle();
 
@@ -47,12 +49,12 @@ event RaffleEntered(address indexed player);
 
 
 
-
+// whenever u inherit a contract which has constructor then you need to add the inherited contracts constructor
 constructor(uint256 entranceFee,uint256 Interval , address vrfCoordinator , bytes32 gasLane , uint256 subscriptionId) VRFConsumerBaseV2Plus(vrfCoordinator){
     i_entranceFee = entranceFee;
-    i_interval = interval; // so later on it would be easy for us to check how much time has passed to generate a random num
+    i_interval = Interval; // so later on it would be easy for us to check how much time has passed to generate a random num
     s_lastTimeStamp = block.timestamp;
-    s_vrfCoordinator.requestRandomWords(); //  s_vrfCoordinator is a state variable in VRF consumer base code but since we have inherited the code we can use this state bvaribale directly which is really really coool
+    s_vrfCoordinator.requestRandomWords(); //  s_vrfCoordinator is a state variable in VRF consumer base code but since we have inherited the code we can use this state variable directly which is really really coool
     i_keyHash = gasLane;
     i_subscriptionId = subscriptionId;
 }
@@ -104,7 +106,7 @@ Storing historical data in Event Logs is drastically cheaper on gas.
     revert();
  }
 
-
+// CHAINLINK VRF CODE
 
  uint256 requestID = s_vrfCoordinator.requestRandomWords(VRFV2PlusClient.RandomWordsRequest({
     keyHash: i_keyHash, // max gas price you are willing to pay for a request in wei
@@ -116,6 +118,12 @@ Storing historical data in Event Logs is drastically cheaper on gas.
   })
 );
 
+/*
+so basically in above code we have the access to s_vrfCoordinator so basically we requested a random word and then inside it is a whole bunch of stuff in here
+basically in lib/chainlink/contracts/vrf/dev/libraries we have VRF COORDINATOR V2 interface thing and in that we have struct which have all the datas in it
+
+ */
+
 
 
     }
@@ -125,8 +133,8 @@ getting random num on blockchain is quite difficult the main reason is the deter
 getting random no is a two transaction process first we have to mae a transaction to request random num generator and in a second transaction the chainlink oracle will actually sends us or add some random num on chain
 
 for above code we just went to chainlibk vrf on google and copy pasted it and then u gotta be exporting that thing as well by opening that code in remix and then just copy paste the export thing
-and uk just export thing doest work well in foundry coz ut cant extract it so we gotta be downloading chainlink brownie contract in our liubrary
-
+and uk just export thing doest work well in foundry coz u cant extract it so we gotta be downloading chainlink brownie contract in our liubrary
+for downloading chainlink contract ukk what to do rytt like just go to google type chainlink brownie contract and it will give u the cmnd u gotta write that in the terminal 
 and then u gotta do remapping in foundry.toml
 
 also like what we imported is that in lib => brownie contracts => vrf => dev => VRFConsumerBaseV2Plus.sol is actually inhrited and it has constructor in it
@@ -234,6 +242,18 @@ Use Topics (Indexing) when:
 You expect your front-end application or users to search, filter, or query historical data based on that specific parameter (e.g., “Show me all raffle entries made specifically by wallet address 0x123...” or “Show me every time the exchange rate changed to X”).
 
 
+
+
+
+ */
+
+/*
+ACTUAL STEPS
+1.forge init
+2.delete each and every file in src,test,script and make new for each of them
+3.for vrf thing go to website chainlink vrf use subscription mode copy the chotus code part and the export
+4.for vrf to run u gotta need to download smart contract chainlink brownie thing and its process is same just search for smart contract chainlink brownie and then it will give u the cmnd with the version to write in terminal 
+5.do remapping in foundry.toml for chainlink
 
 
 
