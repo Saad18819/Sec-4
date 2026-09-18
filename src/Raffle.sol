@@ -32,7 +32,7 @@ uint256 private immutable i_interval;
 uint256 private s_lastTimeStamp;
 address payable[] private s_players; 
 // s implies storage variable adn we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
-// payable means see after winning the raffle that address need to be paid so without oayable u wont be able to pay that address broooo
+// payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
 // whenever a contract has to pick someone from storage and push money to them, you need a payable array
 
 bytes32 private immutable i_keyHash;
@@ -43,6 +43,9 @@ uint16 private constant REQUEST_CONFIRMATION = 3;
 /*EVENTS */
 
 event RaffleEntered(address indexed player);
+
+
+
 
 
 constructor(uint256 entranceFee,uint256 Interval , address vrfCoordinator , bytes32 gasLane , uint256 subscriptionId) VRFConsumerBaseV2Plus(vrfCoordinator){
@@ -76,6 +79,18 @@ s_players.push(payable(msg.sender));
 // in solidity  it does not automatically convert a standard address into an address payable without explicitally mentioning it
 
 emit RaffleEntered(msg.sender);
+/*
+The emit keyword is used to fire (or trigger) a smart contract Event, broadcasting data to the outside world.
+Logs Data to the Blockchain: It takes msg.sender and permanently writes it into the Ethereum transaction logs.
+Notifies Off-Chain Apps (Frontend):
+Optimizes Gas Costs: Storing data in contract storage variables (s_players) is very expensive. 
+Storing historical data in Event Logs is drastically cheaper on gas.
+
+
+
+ */
+
+
     }
 
 
