@@ -38,6 +38,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     bytes32 private immutable i_keyHash;
     uint256 private immutable i_subscriptionId;
     uint16 private constant REQUEST_CONFIRMATION = 3;
+    uint32 private immutable i_callbackGasLimit;
     uint32 private constant NUM_WORDS =1;
 
     /*EVENTS */
@@ -45,7 +46,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     event RaffleEntered(address indexed player);
 
     // whenever u inherit a contract which has constructor then you need to add the inherited contracts constructor
-    constructor(uint256 entranceFee, uint256 Interval, address vrfCoordinator, bytes32 gasLane, uint256 subscriptionId)
+    constructor(uint256 entranceFee, uint256 Interval, address vrfCoordinator, bytes32 gasLane, uint256 subscriptionId,uint32 callbackGasLimit)
         VRFConsumerBaseV2Plus(vrfCoordinator)
     {
         i_entranceFee = entranceFee;
@@ -54,6 +55,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
         s_vrfCoordinator.requestRandomWords(); //  s_vrfCoordinator is a state variable in VRF consumer base code but since we have inherited the code we can use this state variable directly which is really really coool
         i_keyHash = gasLane;
         i_subscriptionId = subscriptionId;
+        i_callbackGasLimit = callbackGasLimit;
     }
 
     // function abt how people should be able to enter raffle
@@ -94,11 +96,11 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
         // CHAINLINK VRF CODE.... basically if u analyse it properly its a struct which is definitely exported from a contract file with the name give below
 
-        VRFV2PlusClient.RandomWordsRequests memory request = VRFV2PlusClient.RandomWordsRequest({
+        VRFV2PlusClient.RandomWordsRequest memory request = VRFV2PlusClient.RandomWordsRequest({
             keyHash: i_keyHash, // max gas price you are willing to pay for a request in wei
             subId: i_subscriptionId, // unique number that holds ETH to automatically pay for vrf random num request across ur smart contracts
             requestConfirmations: REQUEST_CONFIRMATION, // how many confirmations chainlink nodes shd wait before responding like after u send a request it will wait X number of block before trying to give you a random number
-            callbackGasLimit: callbackGasLimit, // the limit for how much gas to use for the callback request
+            callbackGasLimit: i_callbackGasLimit, // the limit for how much gas to use for the callback request
             numWords: NUM_WORDS,// this is the number of random numbers we want
             extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: true})) // new parameter
         });
