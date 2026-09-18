@@ -98,7 +98,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
             subId: i_subscriptionId, // unique number that holds ETH to automatically pay for vrf random num request across ur smart contracts
             requestConfirmations: REQUEST_CONFIRMATION, // how many confirmations chainlink nodes shd wait before responding like after u send a request it will wait X number of block before trying to give you a random number
             callbackGasLimit: callbackGasLimit, // the limit for how much gas to use for the callback request
-            numWords: numWords,
+            numWords: numWords,// this is the number of random numbers we want
             extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: true})) // new parameter
         });
 
