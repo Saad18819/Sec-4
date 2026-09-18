@@ -18,7 +18,7 @@ and then the system will generate a random number which will automatically selec
  * @dev Implements Chainlink VRFv2.5
  */
 
-
+// make sure to go through this contract once as well
 import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
@@ -106,11 +106,13 @@ Storing historical data in Event Logs is drastically cheaper on gas.
     revert();
  }
 
-// CHAINLINK VRF CODE
+// CHAINLINK VRF CODE.... basically if u analyse it properly its a struct which is definitely exported from a contract file with the name give below 
 
- uint256 requestID = s_vrfCoordinator.requestRandomWords(VRFV2PlusClient.RandomWordsRequest({
+
+
+ VRFV2PlusClient.RandomWordsRequests request= VRFV2PlusClient.RandomWordsRequest({
     keyHash: i_keyHash, // max gas price you are willing to pay for a request in wei
-    subId: i_subscriptionId,
+    subId: i_subscriptionId, // unique number that holds ETH to automatically pay for vrf random num request across ur smart contracts
     requestConfirmations: REQUEST_CONFIRMATION, // how many confirmations chainlink nodes shd wait before responding like after u send a request it will wait X number of block before trying to give you a random number
     callbackGasLimit: callbackGasLimit,
     numWords: numWords,
@@ -121,6 +123,9 @@ Storing historical data in Event Logs is drastically cheaper on gas.
 /*
 so basically in above code we have the access to s_vrfCoordinator so basically we requested a random word and then inside it is a whole bunch of stuff in here
 basically in lib/chainlink/contracts/vrf/dev/libraries we have VRF COORDINATOR V2 interface thing and in that we have struct which have all the datas in it
+
+in chainlink docs we have the explanation of keyhash and other things blah blah
+keyhash is the max amnt of gas so we telling it upfront thats why we used it in constructor as well
 
  */
 
@@ -251,7 +256,7 @@ You expect your front-end application or users to search, filter, or query histo
 ACTUAL STEPS
 1.forge init
 2.delete each and every file in src,test,script and make new for each of them
-3.for vrf thing go to website chainlink vrf use subscription mode copy the chotus code part and the export
+3.for vrf thing go to website chainlink vrf use subscription mode copy the chotus code part and then export thing as well
 4.for vrf to run u gotta need to download smart contract chainlink brownie thing and its process is same just search for smart contract chainlink brownie and then it will give u the cmnd with the version to write in terminal 
 5.do remapping in foundry.toml for chainlink
 
