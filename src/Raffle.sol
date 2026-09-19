@@ -126,7 +126,7 @@ if(s_raffleState != RaffleState.OPEN){
             revert();
         }
 
-
+s_raffleState = RaffleState.CALCULATING // so yeah if we get into the process of choosing a winner so we have updated the raffle current situation so now no one else can enter the state
 
 
 
@@ -179,6 +179,7 @@ function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) in
     // and keep in mind random number is frkn long like 23456345302564030789 smthng
     address payable recentWinner = s_players[indexOfWinner];
     s_recentWinner = recentWinner;
+    s_raffleState = RaffleState.OPEN; // as we got the winner we have updated the situation accordingly so now people can enter raffle again coz we got the winner so now no chance of manipulation
     (bool success,) = recentWinner.call{value:address(this).balance}("");
     // this contract will have money...like whatever u entrance fee is will be accumulated in this contract itself so yeah that all handsome amnt will be given to the winner
     if(!success){
