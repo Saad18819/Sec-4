@@ -142,17 +142,17 @@ function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) in
 /*
 EXPLANATION:
 
-An abstract contract in Solidity is a contract that has at least one function defined without an implementation (without a code body { ... }). which is called as unimplemented function
+An abstract contract in Solidity is a contract that has at least one function defined without an implementation (without a code body { ... }). which is called an unimplemented function
 It acts as a blueprint or template that other contracts must inherit from and complete.
 abstract contract cannot be deployed directly and the unimplemented function is marked virtual so derived contract can override them
 and abstract contract naming is given by   abstract contract "name"{}
-VRFConsumerBaseV2Plus is a abstract contract...u can check it out its codebase
+VRFConsumerBaseV2Plus is a abstract contract...u can check out its codebase
 u might for a split sec can thought since its visibility is internal how we are suppose to call this function or override it but remember in internal the parent and the child contract has the accesss
 it is internal instead of external  nhi toh anyone on the internet could call it directly on your contract and fake random numbers to steal the lottery funds.
 
-Chainlink provides an external entry point called rawFulfillRandomWords. When Chainlink sends the random number back to your contract, 
+Chainlink provides an external visibility called rawFulfillRandomWords check in the same codebase. When Chainlink sends the random number back to your contract, 
 it calls rawFulfillRandomWords function. 
-That function verifies that the caller is genuine and 
+That function verifies that the caller is genuine and in it we have fulfillrandomwords function so it will call
 then executes your internal fulfillRandomWords logic.
 
 
