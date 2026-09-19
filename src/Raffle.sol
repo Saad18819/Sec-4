@@ -37,6 +37,37 @@ enum RaffleState{
 }
 
 
+/*
+ENUM EXPLANATION
+
+An enum (short for enumeration) in Solidity is a user-defined data type used to create a restricted set of explicit constant values.
+examples of enum
+
+enum Status {
+    INACTIVE, // 0
+    ACTIVE    // 1
+}
+
+enum Direction {
+    NORTH, // 0
+    SOUTH, // 1
+    EAST,  // 2
+    WEST   // 3
+}
+
+At least 1 member: An enum must have at least one option declared (you cannot create an empty enum {}).
+Default Value: An enum variable will always initialize to its first option (index 0).
+
+Cannot exceed 256 members: If you try to declare 257 options inside a single enum, the compiler will throw an error because it exceeds the uint8 storage limit.
+
+We generally use enum when a process goes through distince stages and we need to keep track of current status
+
+
+here we used enum for the purpose of tracking the raffle status like we dont want people to enter the raffle when we are calculating the winner okkk so at that time we need to restrrict people entering the raffle
+
+ */
+
+
 /* VARIABLE DECLARATION */
     uint256 private immutable i_entranceFee;
     // @dev THe duration of the lottery in seconds
@@ -47,7 +78,7 @@ enum RaffleState{
     // payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
     // whenever a contract has to pick someone from storage and push money to them, you need a payable array
 address private s_recentWinner;
-RaffleState private s_raffleState;
+RaffleState private s_raffleState; 
 
 /*Struct variable declaration */
     bytes32 private immutable i_keyHash;
