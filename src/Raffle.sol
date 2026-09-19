@@ -25,6 +25,9 @@ import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/V
 // in lib smart brownie contract go to src/vrf/dev/VRFConsumerBaseV2Plus.sol this what we are inheriting
 contract Raffle is VRFConsumerBaseV2Plus {
     error Raffle_SendMoreToEnterRaffle();
+error Raffle_TransferFailed();
+
+
 
     uint256 private immutable i_entranceFee;
     // @dev THe duration of the lottery in seconds
@@ -34,6 +37,10 @@ contract Raffle is VRFConsumerBaseV2Plus {
     // s implies storage variable and we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
     // payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
     // whenever a contract has to pick someone from storage and push money to them, you need a payable array
+address private s_recentWinner;
+
+
+
 
     bytes32 private immutable i_keyHash;
     uint256 private immutable i_subscriptionId;
@@ -137,7 +144,18 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
 
 
-function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) internal override{}
+function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) internal override{
+    uint256 indexOfWinner = randomWords[0] % s_players.length; // since we will be having a single random words coz we only gonna select one winner
+    // and keep in mind random number is frkn long like 23456345302
+    address payable recentWinner = s_players[indexOfWinner];
+    s_recentWinner = recentWinner;
+    (bool success,) = recentWinner.call{value:address(this).balance}("");
+    // this contract will have money...like whatever u entrance fee is will be accumulated in this contract itself so yeah that all handsome amnt will be given to the winner
+    if(!success){
+        revert Raffle_TransferFailed();
+    }
+    }
+
 
 /*
 EXPLANATION:
