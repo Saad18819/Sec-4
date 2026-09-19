@@ -47,7 +47,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     // whenever u inherit a contract which has constructor then you need to add the inherited contracts constructor
     constructor(uint256 entranceFee, uint256 Interval, address vrfCoordinator, bytes32 gasLane, uint256 subscriptionId,uint32 callbackGasLimit)
-        VRFConsumerBaseV2Plus(vrfCoordinator)
+        VRFConsumerBaseV2Plus(vrfCoordinator) // passed directly into parent constructor....basically thats how u write when u inherit contract which has constructor
     {
         i_entranceFee = entranceFee;
         i_interval = Interval; // so later on it would be easy for us to check how much time has passed to generate a random num
