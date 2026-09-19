@@ -146,7 +146,7 @@ address private s_recentWinner;
 
 function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) internal override{
     uint256 indexOfWinner = randomWords[0] % s_players.length; // since we will be having a single random words coz we only gonna select one winner
-    // and keep in mind random number is frkn long like 23456345302
+    // and keep in mind random number is frkn long like 23456345302564030789 smthng
     address payable recentWinner = s_players[indexOfWinner];
     s_recentWinner = recentWinner;
     (bool success,) = recentWinner.call{value:address(this).balance}("");
