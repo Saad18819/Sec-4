@@ -48,6 +48,14 @@ address private s_recentWinner;
     uint32 private immutable i_callbackGasLimit;
     uint32 private constant NUM_WORDS =1;
 
+
+    /*
+        uint16 private constant REQUEST_CONFIRMATION = 3;
+this means
+In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which represents the number of block confirmations the Chainlink node must wait before generating and submitting the random number back to your contract.
+   
+     */
+
     /*EVENTS */
 
     event RaffleEntered(address indexed player);
