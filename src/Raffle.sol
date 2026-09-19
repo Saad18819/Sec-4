@@ -102,7 +102,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
             requestConfirmations: REQUEST_CONFIRMATION, // how many confirmations chainlink nodes shd wait before responding like after u send a request it will wait X number of block before trying to give you a random number
             callbackGasLimit: i_callbackGasLimit, // the limit for how much gas to use for the callback request
             numWords: NUM_WORDS,// this is the number of random numbers we want
-            extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: true})) // new parameter
+            extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: false})) // this is where we can set some extra arguments depending on the chainlink VRF version(based on version u can pay with different things like native eth instead of LINK)...LINK is the native ERC-20 utility token of the Chainlink network. It serves as payment to the decentralized oracle network for generating provably fair random numbers and delivering them on-chain.
         });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
 
