@@ -105,6 +105,8 @@ contract Raffle is VRFConsumerBaseV2Plus {
             extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: false})) // this is where we can set some extra arguments depending on the chainlink VRF version(based on version u can pay with different things like native eth instead of LINK)...LINK is the native ERC-20 utility token of the Chainlink network. It serves as payment to the decentralized oracle network for generating provably fair random numbers and delivering them on-chain.
         });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
+// , we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
+
 
         /*
         so basically in above code we have the access to s_vrfCoordinator so basically we requested a random word and then inside it is a whole bunch of stuff in here
@@ -139,6 +141,11 @@ function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) in
 
 /*
 EXPLANATION:
+
+An abstract contract in Solidity is a contract that has at least one function defined without an implementation (without a code body { ... }). which is called as unimplemented function
+It acts as a blueprint or template that other contracts must inherit from and complete.
+abstract contract cannot be deployed directly and the unimplemented function is marked virtual so derived contract can override them
+
 
 
 
