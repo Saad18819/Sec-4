@@ -145,7 +145,7 @@ EXPLANATION:
 An abstract contract in Solidity is a contract that has at least one function defined without an implementation (without a code body { ... }). which is called as unimplemented function
 It acts as a blueprint or template that other contracts must inherit from and complete.
 abstract contract cannot be deployed directly and the unimplemented function is marked virtual so derived contract can override them
-
+and abstract contract naming is given by   abstract contract "name"{}
 
 
 
