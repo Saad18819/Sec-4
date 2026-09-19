@@ -146,6 +146,14 @@ An abstract contract in Solidity is a contract that has at least one function de
 It acts as a blueprint or template that other contracts must inherit from and complete.
 abstract contract cannot be deployed directly and the unimplemented function is marked virtual so derived contract can override them
 and abstract contract naming is given by   abstract contract "name"{}
+VRFConsumerBaseV2Plus is a abstract contract...u can check it out its codebase
+u might for a split sec can thought since its visibility is internal how we are suppose to call this function or override it but remember in internal the parent and the child contract has the accesss
+it is internal instead of external  nhi toh anyone on the internet could call it directly on your contract and fake random numbers to steal the lottery funds.
+
+Chainlink provides an external entry point called rawFulfillRandomWords. When Chainlink sends the random number back to your contract, 
+it calls rawFulfillRandomWords function. 
+That function verifies that the caller is genuine and 
+then executes your internal fulfillRandomWords logic.
 
 
 
