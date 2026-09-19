@@ -29,7 +29,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     uint256 private immutable i_entranceFee;
     // @dev THe duration of the lottery in seconds
     uint256 private immutable i_interval;
-    uint256 private s_lastTimeStamp;
+    uint256 private s_lastTimeStamp; // it cant be set immutable coz it must be updated every lottery round, whenever a new winner is picked the timestamp needs to be updated to reset the timer
     address payable[] private s_players;
     // s implies storage variable and we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
     // payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
@@ -214,8 +214,9 @@ Use Topics (Indexing) when:
 You expect your front-end application or users to search, filter, or query historical data based on that specific parameter (e.g., “Show me all raffle entries made specifically by wallet address 0x123...” or “Show me every time the exchange rate changed to X”).
 
 
-
-
+Assigning a value to a regular variable in the constructor simply sets its initial state. It does not lock it permanently unless you explicitly attach the immutable keyword to the variable declaration:
+the above is specifically to understand s_lastTimeStamp coz u have put that in construcotr and after every lottery it renews the time
+When Chainlink VRF returns the random number, your callback function (fulfillRandomWords) picks the winner, resets s_players, and updates s_lastTimeStamp:
 
  */
 
