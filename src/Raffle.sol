@@ -26,9 +26,18 @@ import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/V
 contract Raffle is VRFConsumerBaseV2Plus {
     error Raffle_SendMoreToEnterRaffle();
 error Raffle_TransferFailed();
+error Raffle_RaffleNotOpen()
+
+/* enum is a kind of type declaration so we gonna put it over the variable declaration */
+
+enum RaffleState{
+    // in solidity each of the type can be converted to integers
+    OPEN, // integer 0
+    CALCULATING // integer 1
+}
 
 
-
+/* VARIABLE DECLARATION */
     uint256 private immutable i_entranceFee;
     // @dev THe duration of the lottery in seconds
     uint256 private immutable i_interval;
@@ -38,10 +47,9 @@ error Raffle_TransferFailed();
     // payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
     // whenever a contract has to pick someone from storage and push money to them, you need a payable array
 address private s_recentWinner;
+RaffleState private s_raffleState;
 
-
-
-
+/*Struct variable declaration */
     bytes32 private immutable i_keyHash;
     uint256 private immutable i_subscriptionId;
     uint16 private constant REQUEST_CONFIRMATION = 3;
@@ -53,7 +61,9 @@ address private s_recentWinner;
         uint16 private constant REQUEST_CONFIRMATION = 3;
 this means
 In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which represents the number of block confirmations the Chainlink node must wait before generating and submitting the random number back to your contract.
-   
+   Request Emitted (Block $N$):When your contract calls pickWinner(), a transaction is processed in Block $N$, emitting an event requesting randomness from Chainlink.Waiting for Confirmations (Blocks $N+1$, $N+2$, $N+3$):The Chainlink VRF nodes do not respond immediately. They monitor the network and wait until 3 additional blocks are minted on top of the block containing your request.Fulfillment (Block $N+4$ or later):Once 3 blocks have passed, Chainlink triggers fulfillRandomWords() to deliver the random number and select the winner.
+ this is done to prevent the manipulation of the history who won
+
      */
 
     /*EVENTS */
@@ -71,6 +81,7 @@ In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which r
         i_keyHash = gasLane;
         i_subscriptionId = subscriptionId;
         i_callbackGasLimit = callbackGasLimit;
+        s_raffleState = RaffleState.OPEN; // we can write this as well RaffleState{0}
     }
 
     // function abt how people should be able to enter raffle
@@ -86,6 +97,12 @@ In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which r
         // another crazy method is using error and require withut using string
         // require(msg.value >= i_entranceFee , SendMoreToEnterRaffle());
         // but above one only runs with specific version of solidity and compiler version so not a good option
+
+if(s_raffleState != RaffleState.OPEN){
+    revert Raffle_RaffleNotOpen();
+}
+
+
 
         s_players.push(payable(msg.sender));
         // in solidity  it does not automatically convert a standard address into an address payable without explicitally mentioning it
@@ -109,6 +126,11 @@ In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which r
             revert();
         }
 
+
+
+
+
+
         // CHAINLINK VRF CODE.... basically if u analyse it properly its a struct which is definitely exported from a contract file with the name give below
 
         VRFV2PlusClient.RandomWordsRequest memory request = VRFV2PlusClient.RandomWordsRequest({
@@ -120,7 +142,7 @@ In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which r
             extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: false})) // this is where we can set some extra arguments depending on the chainlink VRF version(based on version u can pay with different things like native eth instead of LINK)...LINK is the native ERC-20 utility token of the Chainlink network. It serves as payment to the decentralized oracle network for generating provably fair random numbers and delivering them on-chain.
         });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
-// , we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
+// we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
 
 
         /*
