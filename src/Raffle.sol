@@ -5,7 +5,7 @@ pragma solidity 0.8.19;
 // we will be working with specific sets of contract that works best with 0.8.19
 
 /*
-basically the PROJECT IS LIKE A LOTTERY SYSTEM like people gonna buy the tickets or tokens whatever
+basically the PROJECT IS LIKE A LOTTERY SYSTEM. people gonna buy the tickets or tokens whatever
 and then the system will generate a random number which will automatically selects the winner
 
 
@@ -31,7 +31,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     uint256 private immutable i_interval;
     uint256 private s_lastTimeStamp;
     address payable[] private s_players;
-    // s implies storage variable adn we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
+    // s implies storage variable and we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
     // payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
     // whenever a contract has to pick someone from storage and push money to them, you need a payable array
 
@@ -52,7 +52,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
         i_entranceFee = entranceFee;
         i_interval = Interval; // so later on it would be easy for us to check how much time has passed to generate a random num
         s_lastTimeStamp = block.timestamp;
-        s_vrfCoordinator.requestRandomWords(); //  s_vrfCoordinator is a state variable in VRF consumer base code but since we have inherited the code we can use this state variable directly which is really really coool
+
         i_keyHash = gasLane;
         i_subscriptionId = subscriptionId;
         i_callbackGasLimit = callbackGasLimit;
