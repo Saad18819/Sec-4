@@ -226,6 +226,7 @@ ACTUAL STEPS
 3.for vrf thing go to website chainlink vrf use subscription mode copy the chotus code part and then export thing as well
 4.for vrf to run u gotta need to download smart contract chainlink brownie thing and its process is same just search for smart contract chainlink brownie and then it will give u the cmnd with the version to write in terminal
 5.do remapping in foundry.toml for chainlink
+6.and in between we can do "forge build" to make sure we doing everything crct
 
 
 
