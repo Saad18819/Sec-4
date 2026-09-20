@@ -212,7 +212,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
        // checks : we dont have any right now but its like if condition and all we are checking first
        
 
-       
+
        // EFFECTS (Internal contract state)
         uint256 indexOfWinner = randomWords[0] % s_players.length; // since we will be having a single random words coz we only gonna select one winner
         // and keep in mind random number is frkn long like 23456345302564030789 smthng
@@ -222,15 +222,16 @@ contract Raffle is VRFConsumerBaseV2Plus {
         s_players = new address payable[](0); // we just resetting the array
         s_lastTimeStamp = block.timestamp;
         emit WinnerPicked(s_recentWinner); // this also comes under effects coz it aint interacting with external contract 
+        // events (emit) are classified under Effects because an event only modifies the internal state of the current Ethereum node (writing to transaction logs), without transferring control to an external entity.
         
-        
+
         // INTERACTION (this is gonna be the external contract interactions)
         (bool success,) = recentWinner.call{value: address(this).balance}("");
         // this contract will have money...like whatever u entrance fee is will be accumulated in this contract itself so yeah that all handsome amnt will be given to the winner
         if (!success) {
             revert Raffle_TransferFailed();
         }
-     
+     /*In smart contract security, an Interaction specifically refers to handing control over to another address or smart contract—such as an external call (.call{}, .transfer(), or calling another contract's function). When control is handed over, the external contract can execute arbitrary code and potentially reenter your contract before your state is updated. */
     }
 
     /*
