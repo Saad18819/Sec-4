@@ -101,6 +101,8 @@ Increased security against potential blockchain reorganizations at the cost of l
     /*EVENTS */
 
     event RaffleEntered(address indexed player);
+event WinnerPicked(address indexed winner);
+
 
     // whenever u inherit a contract which has constructor then you need to add the inherited contracts constructor
     constructor(uint256 entranceFee, uint256 Interval, address vrfCoordinator, bytes32 gasLane, uint256 subscriptionId,uint32 callbackGasLimit)
@@ -212,11 +214,14 @@ function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) in
     address payable recentWinner = s_players[indexOfWinner];
     s_recentWinner = recentWinner;
     s_raffleState = RaffleState.OPEN; // as we got the winner we have updated the situation accordingly so now people can enter raffle again coz we got the winner so now no chance of manipulation
+    s_players = new address payable[](0); // we just resetting the array 
+    s_lastTimeStamp = block.timestamp;
     (bool success,) = recentWinner.call{value:address(this).balance}("");
     // this contract will have money...like whatever u entrance fee is will be accumulated in this contract itself so yeah that all handsome amnt will be given to the winner
     if(!success){
         revert Raffle_TransferFailed();
     }
+    emit WinnerPicked(s_recentWinner);
     }
 
 
