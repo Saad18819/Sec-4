@@ -89,12 +89,13 @@ RaffleState private s_raffleState;
 
 
     /*
+
         uint16 private constant REQUEST_CONFIRMATION = 3;
 this means
 In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which represents the number of block confirmations the Chainlink node must wait before generating and submitting the random number back to your contract.
    Request Emitted (Block $N$):When your contract calls pickWinner(), a transaction is processed in Block $N$, emitting an event requesting randomness from Chainlink.Waiting for Confirmations (Blocks $N+1$, $N+2$, $N+3$):The Chainlink VRF nodes do not respond immediately. They monitor the network and wait until 3 additional blocks are minted on top of the block containing your request.Fulfillment (Block $N+4$ or later):Once 3 blocks have passed, Chainlink triggers fulfillRandomWords() to deliver the random number and select the winner.
  this is done to prevent the manipulation of the history who won
-
+Increased security against potential blockchain reorganizations at the cost of longer waiting times for the result
      */
 
     /*EVENTS */
@@ -229,6 +230,8 @@ and abstract contract naming is given by   abstract contract "name"{}
 VRFConsumerBaseV2Plus is a abstract contract...u can check out its codebase
 u might for a split sec can thought since its visibility is internal how we are suppose to call this function or override it but remember in internal the parent and the child contract has the accesss
 it is internal instead of external  nhi toh anyone on the internet could call it directly on your contract and fake random numbers to steal the lottery funds.
+To perform security checks, such as verifying that the caller is the expected authorized external source, before executing the main logic its the main reason to keeping it internal
+
 
 Chainlink provides an external visibility called rawFulfillRandomWords check in the same codebase. When Chainlink sends the random number back to your contract, 
 it calls rawFulfillRandomWords function. 
