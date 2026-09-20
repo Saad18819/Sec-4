@@ -100,6 +100,8 @@ contract Raffle is VRFConsumerBaseV2Plus {
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
 
+
+
     // whenever u inherit a contract which has constructor then you need to add the inherited contracts constructor
     constructor(
         uint256 entranceFee,
