@@ -25,50 +25,48 @@ import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/V
 // in lib smart brownie contract go to src/vrf/dev/VRFConsumerBaseV2Plus.sol this what we are inheriting
 contract Raffle is VRFConsumerBaseV2Plus {
     error Raffle_SendMoreToEnterRaffle();
-error Raffle_TransferFailed();
-error Raffle_RaffleNotOpen()
+    error Raffle_TransferFailed();
+    error Raffle_RaffleNotOpen();
 
-/* enum is a kind of type declaration so we gonna put it over the variable declaration */
+    /* enum is a kind of type declaration so we gonna put it over the variable declaration */
 
-enum RaffleState{
-    // in solidity each of the type can be converted to integers
-    OPEN, // integer 0
-    CALCULATING // integer 1
-}
+    enum RaffleState {
+        // in solidity each of the type can be converted to integers
+        OPEN, // integer 0
+        CALCULATING // integer 1
+    }
 
+    /*
+    ENUM EXPLANATION
 
-/*
-ENUM EXPLANATION
+    An enum (short for enumeration) in Solidity is a user-defined data type used to create a restricted set of explicit constant values.
+    examples of enum
 
-An enum (short for enumeration) in Solidity is a user-defined data type used to create a restricted set of explicit constant values.
-examples of enum
+    enum Status {
+        INACTIVE, // 0
+        ACTIVE    // 1
+    }
 
-enum Status {
-    INACTIVE, // 0
-    ACTIVE    // 1
-}
+    enum Direction {
+        NORTH, // 0
+        SOUTH, // 1
+        EAST,  // 2
+        WEST   // 3
+    }
 
-enum Direction {
-    NORTH, // 0
-    SOUTH, // 1
-    EAST,  // 2
-    WEST   // 3
-}
+    At least 1 member: An enum must have at least one option declared (you cannot create an empty enum {}).
+    Default Value: An enum variable will always initialize to its first option (index 0).
 
-At least 1 member: An enum must have at least one option declared (you cannot create an empty enum {}).
-Default Value: An enum variable will always initialize to its first option (index 0).
+    Cannot exceed 256 members: If you try to declare 257 options inside a single enum, the compiler will throw an error because it exceeds the uint8 storage limit.
 
-Cannot exceed 256 members: If you try to declare 257 options inside a single enum, the compiler will throw an error because it exceeds the uint8 storage limit.
-
-We generally use enum when a process goes through distince stages and we need to keep track of current status
-
-
-here we used enum for the purpose of tracking the raffle status like we dont want people to enter the raffle when we are calculating the winner okkk so at that time we need to restrrict people entering the raffle
-
- */
+    We generally use enum when a process goes through distince stages and we need to keep track of current status
 
 
-/* VARIABLE DECLARATION */
+    here we used enum for the purpose of tracking the raffle status like we dont want people to enter the raffle when we are calculating the winner okkk so at that time we need to restrrict people entering the raffle
+
+     */
+
+    /* VARIABLE DECLARATION */
     uint256 private immutable i_entranceFee;
     // @dev THe duration of the lottery in seconds
     uint256 private immutable i_interval;
@@ -77,36 +75,42 @@ here we used enum for the purpose of tracking the raffle status like we dont wan
     // s implies storage variable and we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
     // payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
     // whenever a contract has to pick someone from storage and push money to them, you need a payable array
-address private s_recentWinner;
-RaffleState private s_raffleState; 
+    address private s_recentWinner;
+    RaffleState private s_raffleState;
 
-/*Struct variable declaration */
+    /*Struct variable declaration */
     bytes32 private immutable i_keyHash;
     uint256 private immutable i_subscriptionId;
     uint16 private constant REQUEST_CONFIRMATION = 3;
     uint32 private immutable i_callbackGasLimit;
-    uint32 private constant NUM_WORDS =1;
-
+    uint32 private constant NUM_WORDS = 1;
 
     /*
 
-        uint16 private constant REQUEST_CONFIRMATION = 3;
-this means
-In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which represents the number of block confirmations the Chainlink node must wait before generating and submitting the random number back to your contract.
-   Request Emitted (Block $N$):When your contract calls pickWinner(), a transaction is processed in Block $N$, emitting an event requesting randomness from Chainlink.Waiting for Confirmations (Blocks $N+1$, $N+2$, $N+3$):The Chainlink VRF nodes do not respond immediately. They monitor the network and wait until 3 additional blocks are minted on top of the block containing your request.Fulfillment (Block $N+4$ or later):Once 3 blocks have passed, Chainlink triggers fulfillRandomWords() to deliver the random number and select the winner.
- this is done to prevent the manipulation of the history who won
-Increased security against potential blockchain reorganizations at the cost of longer waiting times for the result
-     */
+            uint16 private constant REQUEST_CONFIRMATION = 3;
+    this means
+    In your contract, that setting corresponds to REQUEST_CONFIRMATIONS = 3, which represents the number of block confirmations the Chainlink node must wait before generating and submitting the random number back to your contract.
+       Request Emitted (Block $N$):When your contract calls pickWinner(), a transaction is processed in Block $N$, emitting an event requesting randomness from Chainlink.Waiting for Confirmations (Blocks $N+1$, $N+2$, $N+3$):The Chainlink VRF nodes do not respond immediately. They monitor the network and wait until 3 additional blocks are minted on top of the block containing your request.Fulfillment (Block $N+4$ or later):Once 3 blocks have passed, Chainlink triggers fulfillRandomWords() to deliver the random number and select the winner.
+     this is done to prevent the manipulation of the history who won
+    Increased security against potential blockchain reorganizations at the cost of longer waiting times for the result
+         */
 
     /*EVENTS */
 
     event RaffleEntered(address indexed player);
-event WinnerPicked(address indexed winner);
-
+    event WinnerPicked(address indexed winner);
 
     // whenever u inherit a contract which has constructor then you need to add the inherited contracts constructor
-    constructor(uint256 entranceFee, uint256 Interval, address vrfCoordinator, bytes32 gasLane, uint256 subscriptionId,uint32 callbackGasLimit)
+    constructor(
+        uint256 entranceFee,
+        uint256 Interval,
+        address vrfCoordinator,
+        bytes32 gasLane,
+        uint256 subscriptionId,
+        uint32 callbackGasLimit
+    )
         VRFConsumerBaseV2Plus(vrfCoordinator) // passed directly into parent constructor....basically thats how u write when u inherit contract which has constructor
+
     {
         i_entranceFee = entranceFee;
         i_interval = Interval; // so later on it would be easy for us to check how much time has passed to generate a random num
@@ -132,11 +136,9 @@ event WinnerPicked(address indexed winner);
         // require(msg.value >= i_entranceFee , SendMoreToEnterRaffle());
         // but above one only runs with specific version of solidity and compiler version so not a good option
 
-if(s_raffleState != RaffleState.OPEN){
-    revert Raffle_RaffleNotOpen();
-}
-
-
+        if (s_raffleState != RaffleState.OPEN) {
+            revert Raffle_RaffleNotOpen();
+        }
 
         s_players.push(payable(msg.sender));
         // in solidity  it does not automatically convert a standard address into an address payable without explicitally mentioning it
@@ -160,10 +162,7 @@ if(s_raffleState != RaffleState.OPEN){
             revert();
         }
 
-s_raffleState = RaffleState.CALCULATING // so yeah if we get into the process of choosing a winner so we have updated the raffle current situation so now no one else can enter the state
-
-
-
+        s_raffleState = RaffleState.CALCULATING; // so yeah if we get into the process of choosing a winner so we have updated the raffle current situation so now no one else can enter the state
 
         // CHAINLINK VRF CODE.... basically if u analyse it properly its a struct which is definitely exported from a contract file with the name give below
 
@@ -172,12 +171,11 @@ s_raffleState = RaffleState.CALCULATING // so yeah if we get into the process of
             subId: i_subscriptionId, // unique number that holds ETH to automatically pay for vrf random num request across ur smart contracts
             requestConfirmations: REQUEST_CONFIRMATION, // how many confirmations chainlink nodes shd wait before responding like after u send a request it will wait X number of block before trying to give you a random number
             callbackGasLimit: i_callbackGasLimit, // the limit for how much gas to use for the callback request
-            numWords: NUM_WORDS,// this is the number of random numbers we want
+            numWords: NUM_WORDS, // this is the number of random numbers we want
             extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: false})) // this is where we can set some extra arguments depending on the chainlink VRF version(based on version u can pay with different things like native eth instead of LINK)...LINK is the native ERC-20 utility token of the Chainlink network. It serves as payment to the decentralized oracle network for generating provably fair random numbers and delivering them on-chain.
         });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
-// we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
-
+        // we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
 
         /*
         so basically in above code we have the access to s_vrfCoordinator so basically we requested a random word and then inside it is a whole bunch of stuff in here
@@ -206,52 +204,43 @@ s_raffleState = RaffleState.CALCULATING // so yeah if we get into the process of
 
      */
 
-
-
-function fulfillRandomWords(uint256 requestId,uint256[] calldata randomWords) internal override{
-    uint256 indexOfWinner = randomWords[0] % s_players.length; // since we will be having a single random words coz we only gonna select one winner
-    // and keep in mind random number is frkn long like 23456345302564030789 smthng
-    address payable recentWinner = s_players[indexOfWinner];
-    s_recentWinner = recentWinner;
-    s_raffleState = RaffleState.OPEN; // as we got the winner we have updated the situation accordingly so now people can enter raffle again coz we got the winner so now no chance of manipulation
-    s_players = new address payable[](0); // we just resetting the array 
-    s_lastTimeStamp = block.timestamp;
-    (bool success,) = recentWinner.call{value:address(this).balance}("");
-    // this contract will have money...like whatever u entrance fee is will be accumulated in this contract itself so yeah that all handsome amnt will be given to the winner
-    if(!success){
-        revert Raffle_TransferFailed();
-    }
-    emit WinnerPicked(s_recentWinner);
+    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords) internal override {
+        uint256 indexOfWinner = randomWords[0] % s_players.length; // since we will be having a single random words coz we only gonna select one winner
+        // and keep in mind random number is frkn long like 23456345302564030789 smthng
+        address payable recentWinner = s_players[indexOfWinner];
+        s_recentWinner = recentWinner;
+        s_raffleState = RaffleState.OPEN; // as we got the winner we have updated the situation accordingly so now people can enter raffle again coz we got the winner so now no chance of manipulation
+        s_players = new address payable[](0); // we just resetting the array
+        s_lastTimeStamp = block.timestamp;
+        (bool success,) = recentWinner.call{value: address(this).balance}("");
+        // this contract will have money...like whatever u entrance fee is will be accumulated in this contract itself so yeah that all handsome amnt will be given to the winner
+        if (!success) {
+            revert Raffle_TransferFailed();
+        }
+        emit WinnerPicked(s_recentWinner);
     }
 
+    /*
+    EXPLANATION:
 
-/*
-EXPLANATION:
-
-An abstract contract in Solidity is a contract that has at least one function defined without an implementation (without a code body { ... }). which is called an unimplemented function
-It acts as a blueprint or template that other contracts must inherit from and complete.
-abstract contract cannot be deployed directly and the unimplemented function is marked virtual so derived contract can override them
-and abstract contract naming is given by   abstract contract "name"{}
-VRFConsumerBaseV2Plus is a abstract contract...u can check out its codebase
-u might for a split sec can thought since its visibility is internal how we are suppose to call this function or override it but remember in internal the parent and the child contract has the accesss
-it is internal instead of external  nhi toh anyone on the internet could call it directly on your contract and fake random numbers to steal the lottery funds.
-To perform security checks, such as verifying that the caller is the expected authorized external source, before executing the main logic its the main reason to keeping it internal
-
-
-Chainlink provides an external visibility called rawFulfillRandomWords check in the same codebase. When Chainlink sends the random number back to your contract, 
-it calls rawFulfillRandomWords function. 
-That function verifies that the caller is genuine and in it we have fulfillrandomwords function so it will call
-then executes your internal fulfillRandomWords logic.
+    An abstract contract in Solidity is a contract that has at least one function defined without an implementation (without a code body { ... }). which is called an unimplemented function
+    It acts as a blueprint or template that other contracts must inherit from and complete.
+    abstract contract cannot be deployed directly and the unimplemented function is marked virtual so derived contract can override them
+    and abstract contract naming is given by   abstract contract "name"{}
+    VRFConsumerBaseV2Plus is a abstract contract...u can check out its codebase
+    u might for a split sec can thought since its visibility is internal how we are suppose to call this function or override it but remember in internal the parent and the child contract has the accesss
+    it is internal instead of external  nhi toh anyone on the internet could call it directly on your contract and fake random numbers to steal the lottery funds.
+    To perform security checks, such as verifying that the caller is the expected authorized external source, before executing the main logic its the main reason to keeping it internal
 
 
-
- */
+    Chainlink provides an external visibility called rawFulfillRandomWords check in the same codebase. When Chainlink sends the random number back to your contract,
+    it calls rawFulfillRandomWords function.
+    That function verifies that the caller is genuine and in it we have fulfillrandomwords function so it will call
+    then executes your internal fulfillRandomWords logic.
 
 
 
-
-
-
+     */
 
     function getEntranceFee() external view returns (uint256) {
         return i_entranceFee;
