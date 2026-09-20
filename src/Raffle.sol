@@ -206,7 +206,14 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
      */
 
+
+/* THE IMPORTANT METHOD CEI-Checks,Effects,Interaction Pattern ... the most important pattern i gotta keep in mind*/
     function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords) internal override {
+       // checks : we dont have any right now but its like if condition and all we are checking first
+       
+
+       
+       // EFFECTS (Internal contract state)
         uint256 indexOfWinner = randomWords[0] % s_players.length; // since we will be having a single random words coz we only gonna select one winner
         // and keep in mind random number is frkn long like 23456345302564030789 smthng
         address payable recentWinner = s_players[indexOfWinner];
@@ -214,12 +221,16 @@ contract Raffle is VRFConsumerBaseV2Plus {
         s_raffleState = RaffleState.OPEN; // as we got the winner we have updated the situation accordingly so now people can enter raffle again coz we got the winner so now no chance of manipulation
         s_players = new address payable[](0); // we just resetting the array
         s_lastTimeStamp = block.timestamp;
+        emit WinnerPicked(s_recentWinner); // this also comes under effects coz it aint interacting with external contract 
+        
+        
+        // INTERACTION (this is gonna be the external contract interactions)
         (bool success,) = recentWinner.call{value: address(this).balance}("");
         // this contract will have money...like whatever u entrance fee is will be accumulated in this contract itself so yeah that all handsome amnt will be given to the winner
         if (!success) {
             revert Raffle_TransferFailed();
         }
-        emit WinnerPicked(s_recentWinner);
+     
     }
 
     /*
