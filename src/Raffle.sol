@@ -219,12 +219,12 @@ contract Raffle is VRFConsumerBaseV2Plus {
         // and keep in mind random number is frkn long like 23456345302564030789 smthng
         address payable recentWinner = s_players[indexOfWinner];
         s_recentWinner = recentWinner;
-        s_raffleState = RaffleState.OPEN; // as we got the winner we have updated the situation accordingly so now people can enter raffle again coz we got the winner so now no chance of manipulation
         s_players = new address payable[](0); // we just resetting the array
+         s_raffleState = RaffleState.OPEN; // as we got the winner we have updated the situation accordingly so now people can enter raffle again coz we got the winner so now no chance of manipulation
         s_lastTimeStamp = block.timestamp;
         emit WinnerPicked(s_recentWinner); // this also comes under effects coz it aint interacting with external contract 
         // events (emit) are classified under Effects because an event only modifies the internal state of the current Ethereum node (writing to transaction logs), without transferring control to an external entity.
-        
+       
 
         // INTERACTION (this is gonna be the external contract interactions)
         (bool success,) = recentWinner.call{value: address(this).balance}("");
