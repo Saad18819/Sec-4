@@ -186,7 +186,7 @@ bool hasPlayers = (s_players.length > 0);
 upKeepNeeded = timeHasPassed && isOpen && hasBalance && hasPlayers ;
 // if above all thing is tru then we gotta get upKeepNeeded as true
 
-
+return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , hex"0x0");
 
 
 }
