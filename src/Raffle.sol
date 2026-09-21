@@ -181,7 +181,12 @@ function checkUpkeep (bytes calldata /*checkData */) public view returns(bool up
    bool timeHasPassed = ((block.timestamp - s_lotteryStartTime) >= i_intervalTime);
        bool isOpen = (s_raffleState == RaffleState.Open);
 bool hasBalance = (address(this).balance > 0);
-bool hasPlayers = s_pl
+bool hasPlayers = (s_players.length > 0);
+
+upKeepNeeded = timeHasPassed && isOpen && hasBalance && hasPlayers ;
+// if above all thing is tru then we gotta get upKeepNeeded as true
+
+
 
 
 }
