@@ -41,6 +41,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     An enum (short for enumeration) in Solidity is a user-defined data type used to create a restricted set of explicit constant values.
     examples of enum
+    enum values are not written in all capital letters. The standard convention is to use PascalCase (Capitalized camelCase).
 
     enum Status {
         INACTIVE, // 0
