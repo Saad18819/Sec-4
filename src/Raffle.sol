@@ -159,6 +159,58 @@ contract Raffle is VRFConsumerBaseV2Plus {
          */
     }
 
+
+
+
+
+/**
+ * @dev this is the function that the chainlink nodes will call to see
+ * if the lottery is ready to have winner picked
+ * The following should be true in order for upKeepNeeded to be true:
+ * 1.The time interval has passed between raffle runs
+ * the lottery is open
+ * the contract has ETH
+ * implicitly, your subscription has LINK
+ * @param - ignored
+ * @return upkeepNeeded - true if it's time to restart the lottery
+ * 
+ */
+
+function checkUpkeep (bytes calldata /*checkData */) public view returns(bool upKeepNeeded, bytes memory /*performData*/) {
+ 
+   bool timeHasPassed = ((block.timestamp - s_lotteryStartTime) >= i_intervalTime);
+       bool isOpen = (s_raffleState == RaffleState.Open);
+bool hasBalance = (address(this).balance > 0);
+bool hasPlayers = s_pl
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function pickWinner() external {
         // to pick a random num first we have to make sure enough time has passsed since the start of lottery
         if ((block.timestamp - s_lastTimeStamp) < i_interval) {
