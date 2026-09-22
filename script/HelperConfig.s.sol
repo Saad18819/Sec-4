@@ -41,7 +41,7 @@ contract HelperConfig is CodeConstants, Script{
     }
 
 
-    
+
 
 function getConfigByChainId(uint256 chainId) public view returns (NetworkConfig memory){
     if(networkConfigs[chainId].vrfCoordinator != address(0)){
@@ -49,7 +49,7 @@ function getConfigByChainId(uint256 chainId) public view returns (NetworkConfig 
     }else if(chainId=LOCAL_CHAIN_ID){
 // getOrCreateANvilETH
     }else{
-        revert
+        revert HelperConfig_InvalidChainId();
     }
 }
 
