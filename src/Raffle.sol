@@ -191,7 +191,12 @@ return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , 
 
 }
 
-/* the above function keeps on running and just checking upKeepNeeded and waiting for it to become true and as soon as it becomes true it calls the performUpKeep function */
+/* 
+
+the above function keeps on running and just checking upKeepNeeded and waiting for it to become true and as soon as it becomes true it calls the performUpKeep function
+Chainlink nodes continuously call checkUpkeep off-chain for free to see if it is time to trigger the lottery draw.
+
+ */
 
 
 
@@ -206,7 +211,39 @@ return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , 
 
 
 
+/*
 
+Once Chainlink Automation sees upKeepNeeded == true, it executes performUpKeep on the blockchain.
+Re-verification Guard: It calls checkUpkeep("") on-chain to prevent front-running or false execution. If upkeep isn't needed, it reverts.
+
+
+1. Smart Contracts are Passive (They Can't "Wake Up" on Their Own)
+Ethereum and EVM smart contracts cannot execute code by themselves on a timer. There is no setInterval or background thread inside EVM.
+A smart contract function only executes when an external account (EOA) or another contract sends a transaction to it and pays the gas fee. If nobody sends a transaction to pickWinner(), the contract will sit idle forever, even if 10 days have passed.
+
+
+
+
+2. The Old Manual Way
+Without an automated keeper system, you had two options:
+You (the admin) had to manually open your wallet every 24 hours, click pickWinner(), and pay the gas fee yourself.
+You had to build and host your own server/cron job running 24/7 that pinged your smart contract to check if time had passed and call pickWinner(). If your server crashed or ran out of gas funds, your lottery broke.
+
+
+
+
+3. How Chainlink Automation (Keepers) Fixes This
+Instead of relying on you or a centralized server to click the button:
+Off-chain Chainlink Nodes run a continuous loop off-chain calling checkUpkeep(). This check is a view function, so it costs $0 in gas.
+As soon as checkUpkeep() returns true (time passed + players present + contract open), the Chainlink node automatically sends an on-chain transaction to execute performUpKeep().
+By renaming pickWinner() to performUpKeep(), you gave the Chainlink network permission to click the "pick winner" button on your behalf the exact moment the conditions are met.
+
+
+
+
+
+
+ */
 
    /*  function pickWinner() external { */
    function performUpKeep(bytes calldata /*performData */) external{
