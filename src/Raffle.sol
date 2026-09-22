@@ -176,7 +176,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
  * 
  */
 
-function checkUpkeep (bytes calldata /*checkData */) public view returns(bool upKeepNeeded, bytes memory /*performData*/) {
+function checkUpkeep (bytes memory /*checkData */) public view returns(bool upKeepNeeded, bytes memory /*performData*/) {
  
    bool timeHasPassed = ((block.timestamp - s_lotteryStartTime) >= i_intervalTime);
        bool isOpen = (s_raffleState == RaffleState.Open);
@@ -184,13 +184,14 @@ bool hasBalance = (address(this).balance > 0);
 bool hasPlayers = (s_players.length > 0);
 
 upKeepNeeded = timeHasPassed && isOpen && hasBalance && hasPlayers ;
-// if above all thing is tru then we gotta get upKeepNeeded as true
+// if above all thing is tru then we gotta get upKeepNeeded as true and like u dont have to metnion its datatype coz u already did inside function parameter 
 
-return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , hex"0x0");
+return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , hex"0x0"); or hex""
 
 
 }
 
+/* the above function keeps on running and just checking upKeepNeeded and waiting for it to become true and as soon as it becomes true it calls the performUpKeep function */
 
 
 
@@ -204,11 +205,25 @@ return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , 
 
 
 
-    function pickWinner() external {
-        // to pick a random num first we have to make sure enough time has passsed since the start of lottery
+
+
+
+   /*  function pickWinner() external { */
+   function performUpKeep(bytes calldata /*performData */) external{
+        /* 
+         to pick a random num first we have to make sure enough time has passsed since the start of lottery
         if ((block.timestamp - s_lastTimeStamp) < i_interval) {
             revert();
         }
+
+        */
+// check to see if enough time has passed
+
+(bool upKeepNeeded,) = checkUpkeep("");
+if(!upKeepNeeded){
+    revert();
+}
+
 
         s_raffleState = RaffleState.CALCULATING; // so yeah if we get into the process of choosing a winner so we have updated the raffle current situation so now no one else can enter the state
 
@@ -236,6 +251,8 @@ return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , 
         we also add callbackGasLimit into the constructor
          */
     }
+
+
 
     /*
     getting random num on blockchain is quite difficult the main reason is the deterministic system...so to get it we gonna work with VRf chainlink
