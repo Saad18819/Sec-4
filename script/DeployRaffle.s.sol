@@ -18,7 +18,7 @@ function deployContract() public returns(Raffle, HelperConfig) {}
 
 /*
 ACtual steps
-1.just write contract name{} nothing inside and then prgam export and all and do "forge build"
+1.just write contract name{} nothing inside and then pragma export and all and do "forge build"
 
 
 
