@@ -14,5 +14,14 @@ contract HelperConfig is Script{
         uint32 callbackGasLimit;
     }
 
-    
+    NetworkConfig public localNetworkConfig;
+    mapping(uint256 chainId => NetworkConfig public networkConfigs);
+
+    constructor(){}
+
+    function getSepoliaEthConfig() public pure returns(NetworkConfig memory){
+       return NetworkConfig({
+
+       })
+    }
 }
