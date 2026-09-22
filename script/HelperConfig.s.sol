@@ -43,14 +43,14 @@ contract HelperConfig is CodeConstants, Script{
 
 
 
-function getConfigByChainId(uint256 chainId) public view returns (NetworkConfig memory){
+function getConfigByChainId(uint256 chainId) public returns (NetworkConfig memory){
     if(networkConfigs[chainId].vrfCoordinator != address(0)){
         return networkConfigs[chainId];
-    }else if(chainId=LOCAL_CHAIN_ID){
+    }else if(chainId == LOCAL_CHAIN_ID){
 // getOrCreateANvilETH
     }else{
         revert HelperConfig_InvalidChainId();
-    }
+    } 
 }
 
 
@@ -69,4 +69,13 @@ subscriptionId: 0
 
        });
     }
+
+function getOrCreateAnvilEthCOnfig() public returns(NetworkConfig memory){
+    // we will first check if we have set an acitve network config
+   if(localNetworkConfig.vrfCoordinator != address(0)){
+    return localNetworkConfig;
+   } 
+}
+
+
 }
