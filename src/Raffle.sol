@@ -173,14 +173,14 @@ contract Raffle is VRFConsumerBaseV2Plus {
  * the contract has ETH
  * implicitly, your subscription has LINK
  * @param - ignored
- * @return upkeepNeeded - true if it's time to restart the lottery
+ * @return upKeepNeeded - true if it's time to restart the lottery
  * 
  */
 
 function checkUpkeep (bytes memory /*checkData */) public view returns(bool upKeepNeeded, bytes memory /*performData*/) {
  
-   bool timeHasPassed = ((block.timestamp - s_lotteryStartTime) >= i_intervalTime);
-       bool isOpen = (s_raffleState == RaffleState.Open);
+   bool timeHasPassed = ((block.timestamp - s_lastTimeStamp) >= i_interval);
+       bool isOpen = (s_raffleState == RaffleState.OPEN);
 bool hasBalance = (address(this).balance > 0);
 bool hasPlayers = (s_players.length > 0);
 
