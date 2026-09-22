@@ -460,7 +460,10 @@ ACTUAL STEPS
 4.for vrf to run u gotta need to download smart contract chainlink brownie thing and its process is same just search for smart contract chainlink brownie and then it will give u the cmnd with the version to write in terminal
 5.do remapping in foundry.toml for chainlink
 6.and in between we can do "forge build" to make sure we doing everything crct
-
+7. whatever code u have written in the end u do chainlink automation to automatically choose winner whenever enough time has passed
+8.go through the chainlink automation site and just for the sake of learning keep in mind how to write that function which u have written above
+9.first deploy script 
+10.testing
 
 
  */
