@@ -21,6 +21,9 @@ contract HelperConfig is Script{
 
     function getSepoliaEthConfig() public pure returns(NetworkConfig memory){
        return NetworkConfig({
+entranceFee: 0.01 ether, // 1e16
+interval :30, // 30 sec
+vrfCoordinator:0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625, // gotta search it up on chainlink vrf supported network site
 
        });
     }
