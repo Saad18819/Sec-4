@@ -27,6 +27,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     error Raffle_SendMoreToEnterRaffle();
     error Raffle_TransferFailed();
     error Raffle_RaffleNotOpen();
+    error Raffle_UpkeepNotNeeded(uint256 balance , uint256 playersLength , uint256 raffleState);
 
     /* enum is a kind of type declaration so we gonna put it over the variable declaration */
 
@@ -260,7 +261,7 @@ make sure to write function name as checkUpKeep and performUpKeep asit is requir
 // check to see if enough time has passed
 (bool upKeepNeeded,) = checkUpkeep("");
 if(!upKeepNeeded){
-    revert();
+    revert Raffle_UpkeepNotNeeded(address(this).balance , s_players.length , uint256(s_raffleState) );
 }
 
 
