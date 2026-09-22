@@ -22,6 +22,6 @@ contract HelperConfig is Script{
     function getSepoliaEthConfig() public pure returns(NetworkConfig memory){
        return NetworkConfig({
 
-       })
+       });
     }
 }
