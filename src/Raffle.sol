@@ -28,6 +28,12 @@ contract Raffle is VRFConsumerBaseV2Plus {
     error Raffle_TransferFailed();
     error Raffle_RaffleNotOpen();
     error Raffle_UpkeepNotNeeded(uint256 balance , uint256 playersLength , uint256 raffleState);
+// If performUpkeep reverts because checkUpkeep returned false, the error won't just say "upkeep not needed". It will spit out the exact contract state at that moment—telling you current balance, playersLength, and raffleState.
+// so it would be easy for me check on which has coz the actual revert in out txn
+
+
+
+
 
     /* enum is a kind of type declaration so we gonna put it over the variable declaration */
 
