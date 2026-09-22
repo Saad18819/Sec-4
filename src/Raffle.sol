@@ -204,18 +204,6 @@ return (upKeepNeeded ,"" ); // or to return null we can also do (upKeepNeeded , 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     function pickWinner() external {
         // to pick a random num first we have to make sure enough time has passsed since the start of lottery
         if ((block.timestamp - s_lastTimeStamp) < i_interval) {
