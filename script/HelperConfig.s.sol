@@ -86,6 +86,9 @@ function getOrCreateAnvilEthCOnfig() public returns(NetworkConfig memory){
    if(localNetworkConfig.vrfCoordinator != address(0)){
     return localNetworkConfig;
    } 
+// Deploy mocks and such
+
+
 }
 
 
