@@ -7,11 +7,11 @@ import { VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/dev/VRF
 
 abstract contract CodeConstants{
 /* VRF MOCK VALUES */
-uint96 public MOCK_BASE_FEE = 0.25 ether;
-uint96 public MOCK_GAS_PRICE_LINK = 1e9;
+uint96 public MOCK_BASE_FEE = 0.25 ether; //The flat fee charged by Chainlink for every single randomness request.
+uint96 public MOCK_GAS_PRICE_LINK = 1e9; // The simulated gas price of the network (in Gwei/wei) used to calculate how much gas the Chainlink node spends to send the random number back to your contract.
 // LINK / ETH price
-int256 public MOCK_WEI_PER_UINT_LINK = 4e15;
-
+int256 public MOCK_WEI_PER_UINT_LINK = 4e15; // The mock conversion rate between ETH and LINK tokens.
+// technical parameters like base fees can theoretically be set to 0 in a test environment, but setting realistic non-zero mock values is intentional:
 
 
     uint256 public constant ETH_SEPOLIA_CHAIN_ID = 1115511;
