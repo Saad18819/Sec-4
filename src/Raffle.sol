@@ -119,7 +119,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
         uint256 subscriptionId,
         uint32 callbackGasLimit
     )
-        VRFConsumerBaseV2Plus(vrfCoordinator) // passed directly into parent constructor....basically thats how u write when u inherit contract which has constructor
+        VRFConsumerBaseV2Plus(vrfCoordinator) // passed directly into parent constructor....basically thats how u write when u inherit contract which has constructor u write that constructor as well
 
     {
         i_entranceFee = entranceFee;
