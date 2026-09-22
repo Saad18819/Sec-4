@@ -239,6 +239,8 @@ As soon as checkUpkeep() returns true (time passed + players present + contract 
 By renaming pickWinner() to performUpKeep(), you gave the Chainlink network permission to click the "pick winner" button on your behalf the exact moment the conditions are met.
 
 
+make sure to write function name as checkUpKeep and performUpKeep asit is required by the Chainlink Automation interface if you want Chainlink nodes to trigger your contract automatically.
+
 
 
 
