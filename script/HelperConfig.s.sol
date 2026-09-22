@@ -3,7 +3,20 @@ pragma solidity 0.8.19;
 
 import {Script} from "forge-std/Script.sol";
 
-contract HelperConfig is Script{
+
+
+abstract contract CodeConstants{
+    uint256 public constant ETH_SEPOLIA_CHAIN_ID = 1115511;
+uint256 public constant LOCAL_CHAIN_ID = 31337;
+}
+
+contract HelperConfig is CodeConstants, Script{
+
+   error HelperConfig_InvalidChainId();
+
+
+
+
 
     struct NetworkConfig{
         uint256 entranceFee;
@@ -14,10 +27,35 @@ contract HelperConfig is Script{
         uint32 callbackGasLimit;
     }
 
+
+
+
+
+
     NetworkConfig public localNetworkConfig;
     mapping(uint256 chainId => NetworkConfig public networkConfigs);
 
-    constructor(){}
+    constructor(){
+        networkConfigs[ETH_SEPOLIA_CHAIN_ID] = getSepoliaEthConfig();
+
+    }
+
+
+    
+
+function getConfigByChainId(uint256 chainId) public view returns (NetworkConfig memory){
+    if(networkConfigs[chainId].vrfCoordinator != address(0)){
+        return networkConfigs[chainId];
+    }else if(chainId=LOCAL_CHAIN_ID){
+// getOrCreateANvilETH
+    }else{
+        revert
+    }
+}
+
+
+
+
 
     function getSepoliaEthConfig() public pure returns(NetworkConfig memory){
        return NetworkConfig({
@@ -26,7 +64,7 @@ interval :30, // 30 sec
 vrfCoordinator:0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625, // gotta search it up on chainlink vrf supported network site
 gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae // same as above
 callbackGasLimit:500000 // 500,000 gas
-
+subscriptionId: 0
 
 
        });
