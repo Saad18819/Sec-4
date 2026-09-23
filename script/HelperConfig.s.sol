@@ -34,6 +34,7 @@ contract HelperConfig is CodeConstants, Script{
 
 
 // When you build a HelperConfig.s.sol script to deploy your contract across different chains (Anvil, Sepolia, Mainnet), you create a NetworkConfig struct to bundle all the chain-specific variables that your contract needs to deploy.
+// although here we have taken all the parameter of chainlik vrf inside the struct
 
     struct NetworkConfig{
         uint256 entranceFee;
@@ -52,7 +53,7 @@ contract HelperConfig is CodeConstants, Script{
     NetworkConfig public localNetworkConfig;
 
 
-    mapping(uint256 chainId => NetworkConfig public networkConfigs);
+   mapping(uint256 chainId => NetworkConfig config) public networkConfigs;
 
     constructor(){
         networkConfigs[ETH_SEPOLIA_CHAIN_ID] = getSepoliaEthConfig();
@@ -78,8 +79,10 @@ function getConfig() public returns(NetworkConfig memory){
 
 
 
+
+
     function getSepoliaEthConfig() public pure returns(NetworkConfig memory){
-       return NetworkConfig({
+    localNetworkConfig = NetworkConfig({
 entranceFee: 0.01 ether, // 1e16
 interval :30, // 30 sec
 vrfCoordinator:0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625, // gotta search it up on chainlink vrf supported network site
@@ -89,7 +92,15 @@ subscriptionId: 0
 
 
        });
+
+       return localNetworkConfig;
     }
+
+
+
+
+
+
 
 function getOrCreateAnvilEthCOnfig() public returns(NetworkConfig memory){
     // we will first check if we have set an active network config
@@ -125,6 +136,41 @@ return localNetworkConfig;
 LEARNINGS
 
 1. whenever u create a struct u separate variables by ; but when u initiate an instance u separate varibale by ,
+
+
+DIfference between pure and view
+
+A. VIEW
+A function marked as view promises that it will read but not write to the contract's storage or the blockchain state.
+
+``
+
+uint256 public number = 10; // State variable in persistent storage
+
+function getNumber() public view returns (uint256) {
+    return number; // Reading state from storage
+}
+
+``
+
+Writing to state means modifying, adding, or deleting data saved on the blockchain
+
+
+
+
+
+B.PURE
+
+A function marked as pure promises that it will neither read from nor write to the contract's storage or the blockchain state.
+
+In getSepoliaEthConfig():
+
+All values (such as 0.01 ether, addresses, gas limits) are hardcoded directly inside the function body.
+
+It does not read any state variables, mapping data, balance info, or block variables (like block.timestamp or block.chainid).
+Instead of reading an existing struct saved in state, this function is constructing a brand-new struct instance from scratch on the fly in memory.
+NetworkConfig({ ... }) is a constructor call: It takes those literal, hardcoded values (0.01 ether, 30, 0x8103..., etc.) and packages them into a brand-new NetworkConfig struct inside temporary memory (memory).  
+ entranceFee, interval, vrfCoordinator are field keys, not variables: Those labels inside the curly braces are the named properties of the NetworkConfig struct definition, not state variables stored on the blockchain. 
 
 
 
