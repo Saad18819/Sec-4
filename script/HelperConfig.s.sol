@@ -72,7 +72,9 @@ return getOrCreateAnvilEthCOnfig();
     } 
 }
 
-
+function getConfig() public returns(NetworkConfig memory){
+    return getConfigByChainId(block.chainid);
+}
 
 
 
