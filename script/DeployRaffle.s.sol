@@ -17,9 +17,16 @@ HelperConfig helperconfig = new HelperConfig();
 HelperConfig.NetworkConfig memory config = helperconfig.getConfigByChainId();
 
 vm.startBroadcast();
-
+Raffle raffle = new Raffle(
+    config.entranceFee,
+    config.interval,
+    config.vrfcoordinator,
+    config.gaslane,
+    config.subscriptionId,
+    config.callbackGasLimit
+)
 vm.stopBroadcast();
-
+return (raffle, helperconfig);
 
 }
 
