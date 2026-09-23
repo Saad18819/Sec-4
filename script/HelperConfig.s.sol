@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import {Script} from "forge-std/Script.sol";
-import { VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFCoordinatorV2_5Mock.sol";
+import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFCoordinatorV2_5Mock.sol";
 
 
 abstract contract CodeConstants{
@@ -99,8 +99,8 @@ function getConfig() public returns(NetworkConfig memory){
 entranceFee: 0.01 ether, // 1e16
 interval :30, // 30 sec
 vrfCoordinator:0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625, // gotta search it up on chainlink vrf supported network site
-gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae // same as above
-callbackGasLimit:500000 // 500,000 gas
+gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae, // same as above
+callbackGasLimit:500000,// 500,000 gas
 subscriptionId: 0
 
 
@@ -130,10 +130,10 @@ localNetworkConfig = NetworkConfig({
 
 entranceFee: 0.01 ether, // 1e16
 interval :30, // 30 sec
-vrfCoordinator:address(vrfCoordinatorMock);
+vrfCoordinator:address(vrfCoordinatorMock),
 // here gaslane address and callback doesnt matter vrfcoordinator address of mock will figure that out so here u write anything
-gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae // same as above
-callbackGasLimit:500000 // 500,000 gas
+gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae, // same as above
+callbackGasLimit:500000,// 500,000 gas
 subscriptionId: 0
 
 });
