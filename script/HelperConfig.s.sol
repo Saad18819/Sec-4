@@ -45,7 +45,20 @@ contract HelperConfig is CodeConstants, Script{
         uint32 callbackGasLimit;
     }
 
+/*
+You are completely right to question that—technically, parameters like interval or entranceFee don't depend on the underlying blockchain architecture the way vrfCoordinator or gasLane do.   
+However, they are included in NetworkConfig for testing and environment customization reasons:
+1. Fast Local Testing vs. Production RealityWhen testing locally on Anvil, you want your tests to run as fast as humanly possible.
+Local Anvil: You might set interval to 30 seconds (or even shorter) so your Foundry tests don't have to wait around or warp through huge amounts of time.  
+ Live Testnet / Mainnet: You might want the lottery to run once every day (86400 seconds) or once every week.   
+ By putting interval inside NetworkConfig, you can change how your raffle behaves on local vs. live networks without hardcoding numbers directly inside your Raffle.sol contract.  
 
+so to summarise u generally write all the parameters in the struct which are dependent on chainlink and also those parameters whose value we dont wanna hardcode 
+
+
+
+
+ */
 
 
 
