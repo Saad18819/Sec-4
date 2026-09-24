@@ -55,6 +55,7 @@ contract Raffletest is Test{
     }
 
 
+
 function testRaffleRevertsWhenYouDontPayEnough() public{
     // Arrange
     vm.prank(PLAYER);
@@ -64,6 +65,8 @@ function testRaffleRevertsWhenYouDontPayEnough() public{
     // coz we have 2 reverts inside enterRaffle and we want to check particular one
         raffle.enterRaffle();
 }
+
+
 
 function testRaffleRecordsPlayerWhenTheyEnter() public{
     // Arrange
@@ -112,6 +115,37 @@ emitterAddress (address): (Optional) The contract address that must emit the eve
 also u gotta copy paste the event thing directly from raffle.sol to test( see at top).
 
  */
+
+
+function testDontAllowPlayersToEnterWhileRaffleIsCalculating() public{
+    // Arrange (we gotta make sure to make the contract calculating here in the arrange itself)
+    vm.prank(PLAYER);
+    raffle.enterRaffle{value:entranceFee}();
+    vm.warp(block.timestamp + interval + 1); // this cheatcode teleport the clock forward
+    vm.roll(block.number + 1); 
+    raffle.performUpKeep(""); // this is actually gonna set the enum to calculating
+
+    // Act/ Assert
+    vm.expectRevert(Raffle.Raffle_RaffleNotOpen.selector);
+    vm.prank(PLAYER);
+    raffle.enterRaffle{value:entranceFee}();
+
+
+
+}
+/*
+vm.roll explanation
+
+Every Ethereum-compatible chain (whether Mainnet, Sepolia, or Foundry's local Anvil network) processes transactions by grouping them into numbered blocks—Block #1, Block #2, Block #3, and so on.
+
+By default, tests run in a local EVM instance starting at block number 1 (or whatever block the local network started at).
+
+vm.roll(500) instantly changes the current environment's block.number to 500.
+
+It is standard practice to use both together so the block environment matches reality (where time passing always correlates with new blocks being produced).
+
+ */
+
 
 }
 
