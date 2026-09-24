@@ -5,7 +5,7 @@ pragma solidity 0.8.19;
 import {test} from "forge-std/Test.sol";
 import {DeployRaffle} from "../../scripts/DeployRaffle.s.sol";
 import {Raffle} from "src/Raffle.sol";
-import {HelperConfig} from "script/Helperconfig.s.sol";
+import {HelperConfig} from "scripts/Helperconfig.s.sol";
 
 
 
@@ -28,8 +28,8 @@ contract Raffletest is test{
     function setUp() external{
 
       DeployRaffle deployer = new DeployRaffle();
-   (raffle , helperConfig) = deployer.DeployRaffle();
-   
+   (raffle , helperConfig) = deployer.deployContract(); // instead of run if u write this it will work as well coz run will anyways gonna call this function itself
+
    HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
    entranceFee = config.entranceFee;
   interval = config.interval;
