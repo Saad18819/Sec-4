@@ -8,7 +8,9 @@ import {HelperConfig} from "./HelperConfig.s.sol";
 
 contract DeployRaffle is Script{
 
-function run() public{}
+function run() public returns(Raffle,HelperConfig){
+return deployContract();
+}
 
 function deployContract() public returns(Raffle, HelperConfig) {
 HelperConfig helperconfig = new HelperConfig();
