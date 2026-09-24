@@ -16,12 +16,12 @@ contract Raffletest is test{
     address public PLAYER = makeAddr("player");
     uint256 public constant STARTING_PLAYER_BALANCE = 10 ether;
  
-   uint256 entranceFee,
-        uint256 interval,
-        address vrfCoordinator,
-        bytes32 gasLane,
-        uint256 subscriptionId,
-        uint32 callbackGasLimit
+   uint256 entranceFee;
+        uint256 interval;
+        address vrfCoordinator;
+        bytes32 gasLane;
+        uint256 subscriptionId;
+        uint32 callbackGasLimit;
 
 
     function setUp() external{
@@ -40,7 +40,8 @@ contract Raffletest is test{
 
 
     function testRaffleInitializationOpenState() public view{
-        
+
+        assert(raffle.getRaffleState()== Raffle.RaffleState.OPEN);
 
     }
 
@@ -49,3 +50,8 @@ contract Raffletest is test{
 
 
 }
+
+/*
+STEPS
+after writing basic test do forge build and forge test
+ */
