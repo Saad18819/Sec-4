@@ -1,6 +1,7 @@
 // SPDX-License-Identifier:MIT
 
 pragma solidity 0.8.19;
+
 import {test} from "forge-std/Test.sol";
 import {DeployRaffle} from "../../scripts/DeployRaffle.s.sol";
 import {Raffle} from "src/Raffle.sol";
