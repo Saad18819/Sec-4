@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import {Script} from "forge-std/Script.sol";
-import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFCoordinatorV2_5Mock.sol";
+import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
 
 
 abstract contract CodeConstants{
@@ -94,7 +94,7 @@ function getConfig() public returns(NetworkConfig memory){
 
 
 
-    function getSepoliaEthConfig() public pure returns(NetworkConfig memory){
+    function getSepoliaEthConfig() public returns(NetworkConfig memory){
     localNetworkConfig = NetworkConfig({
 entranceFee: 0.01 ether, // 1e16
 interval :30, // 30 sec
@@ -108,6 +108,7 @@ subscriptionId: 0
 
        return localNetworkConfig;
     }
+    //  Function declared as pure, but this expression (potentially) reads from the environment or state and also modifies the state thus cant be "view" or "pure"
 
 
 

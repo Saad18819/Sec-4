@@ -2,17 +2,17 @@
 
 pragma solidity 0.8.19;
 
-import {test} from "forge-std/Test.sol";
-import {DeployRaffle} from "../../scripts/DeployRaffle.s.sol";
+import {Test} from "forge-std/Test.sol";
+import {DeployRaffle} from "../../script/DeployRaffle.s.sol";
 import {Raffle} from "src/Raffle.sol";
-import {HelperConfig} from "scripts/Helperconfig.s.sol";
+import {HelperConfig} from "script/HelperConfig.s.sol";
 
 
 
 
-contract Raffletest is test{
+contract Raffletest is Test{
     Raffle public raffle;
-    Helperconfig public helperConfig;
+    HelperConfig public helperConfig;
 
     address public PLAYER = makeAddr("player");
     uint256 public constant STARTING_PLAYER_BALANCE = 10 ether;

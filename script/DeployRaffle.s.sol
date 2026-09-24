@@ -16,17 +16,17 @@ function deployContract() public returns(Raffle, HelperConfig) {
 HelperConfig helperconfig = new HelperConfig();
 // local => deploy mocks, get local config
 // sepolia => get sepolia config
-HelperConfig.NetworkConfig memory config = helperconfig.getConfigByChainId();
+HelperConfig.NetworkConfig memory config = helperconfig.getConfig();
 
 vm.startBroadcast();
 Raffle raffle = new Raffle(
     config.entranceFee,
     config.interval,
-    config.vrfcoordinator,
-    config.gaslane,
+    config.vrfCoordinator,
+    config.gasLane,
     config.subscriptionId,
     config.callbackGasLimit
-)
+);
 vm.stopBroadcast();
 return (raffle, helperconfig);
 
