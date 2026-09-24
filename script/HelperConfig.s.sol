@@ -108,7 +108,7 @@ subscriptionId: 0
 
        return localNetworkConfig;
     }
-    //  Function declared as pure, but this expression (potentially) reads from the environment or state and also modifies the state thus cant be "view" or "pure"
+    //  Function declared as pure earlier, but this expression (potentially) reads from the environment or state and also modifies the state thus cant be "view" or "pure"
 
 
 
