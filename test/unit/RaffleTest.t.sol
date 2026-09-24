@@ -17,7 +17,7 @@ contract Raffletest is test{
     uint256 public constant STARTING_PLAYER_BALANCE = 10 ether;
  
    uint256 entranceFee,
-        uint256 Interval,
+        uint256 interval,
         address vrfCoordinator,
         bytes32 gasLane,
         uint256 subscriptionId,
@@ -25,8 +25,23 @@ contract Raffletest is test{
 
 
     function setUp() external{
+
       DeployRaffle deployer = new DeployRaffle();
-  (raffle , helperConfig) = deployer.DeployRaffle();
+   (raffle , helperConfig) = deployer.DeployRaffle();
+   HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
+   entranceFee = config.entranceFee;
+  interval = config.interval;
+  vrfCoordinator = config.vrfCoordinator;
+  gasLane = config.gasLane;
+  subscriptionId = config.subscriptionId;
+  callbackGasLimit = config.callbackGasLimit;
+
+    }
+
+
+    function testRaffleInitializationOpenState() public view{
+        
+
     }
 
 
