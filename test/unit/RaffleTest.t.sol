@@ -14,6 +14,9 @@ contract Raffletest is test{
     Helperconfig public helperConfig;
 
     address public PLAYER = makeAddr("player");
+    uint256 public constant STARTING_PLAYER_BALANCE = 10 ether;
+
+
 
     function setUp() external{
       DeployRaffle deployer = new DeployRaffle();
