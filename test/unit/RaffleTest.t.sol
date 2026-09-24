@@ -29,6 +29,7 @@ contract Raffletest is test{
 
       DeployRaffle deployer = new DeployRaffle();
    (raffle , helperConfig) = deployer.DeployRaffle();
+   
    HelperConfig.NetworkConfig memory config = helperConfig.getConfig();
    entranceFee = config.entranceFee;
   interval = config.interval;
