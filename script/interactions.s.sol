@@ -102,7 +102,7 @@ Before Raffle.sol can ask for a single random number, three things must happen i
 
 If you miss any of these three steps, your contract will revert when it tries to pick a winner.
 
-
+Step 4: the code u written actually does Step A(that is create Subscription)
 
 
 
