@@ -16,7 +16,9 @@ createSubscription(vrfcoordinator);
 }
 
 function createSubscription(address vrfCoordinator)public{
+    
 console.log("Creating subscription on chainID:",block.chainid);
+
 
 vm.startBroadcast();
 uint256 subId = VRFCoordinatorV2_5Mock(vrfCoordinator).createSubscription();
