@@ -24,6 +24,7 @@ HelperConfig.NetworkConfig memory config = helperconfig.getConfig();
 
 if(config.subscriptionId==0){
     // create subscription
+CreateSubscription  createSubs = new CreateSubscription();
 
 }
 
