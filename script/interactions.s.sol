@@ -10,7 +10,7 @@ function CreateSubscriptionUsingConfig() public returns(uint256,address){
     HelperConfig helperConfig = new HelperConfig();
 address vrfcoordinator = helperConfig.getConfig().vrfCoordinator;
 (uint256 subId,) = createSubscription(vrfcoordinator);
-return (subId , vrfCoordinator);
+return (subId , vrfcoordinator);
 
 
 }
