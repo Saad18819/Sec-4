@@ -89,7 +89,7 @@ return getOrCreateAnvilEthCOnfig();
 function getConfig() public returns(NetworkConfig memory){
     return getConfigByChainId(block.chainid);
 }
-
+// block.chainid is an EVM global variable that returns the unique numerical ID of the blockchain your smart contract or script is currently executing on.
 
 
 
