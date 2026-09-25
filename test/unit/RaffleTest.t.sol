@@ -88,7 +88,7 @@ function testEnteringRaffleEmitsEvent() public{
 
 
     // Act
-    vm.expectEmit(true,false,false,false,address(raffle)); // this is telling foundry we are expecting to emit an event
+    vm.expectEmit(true,false,false,false,address(raffle)); // this is telling foundry we are expecting to emit an event from this address
 emit RaffleEntered(PLAYER); // this is exactly the event that we are expecting to emit here
 
 
