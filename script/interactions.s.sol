@@ -39,12 +39,19 @@ CreateSubscriptionUsingConfig();
 
 
 contract FundSubscription is Script{
+uint256 public constant FUND_AMOUNT = 3 ether // 3 LINKS coz link also have this 18 decimal thing
+
+
     function fundSubscriptionUsingConfig() public{
+  HelperConfig helperConfig = new HelperConfig();
+address vrfcoordinator = helperConfig.getConfig().vrfCoordinator;
+uint256 subscriptionId = helperConfig.getConfig().subscriptionId;
+
 
     }
 
 function run() public{
-    
+
 }
 
 }
