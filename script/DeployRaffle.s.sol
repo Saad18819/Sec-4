@@ -18,6 +18,13 @@ HelperConfig helperconfig = new HelperConfig();
 // sepolia => get sepolia config
 HelperConfig.NetworkConfig memory config = helperconfig.getConfig();
 
+
+if(config.subscriptionId==0){
+    // create subscription
+    
+}
+
+
 vm.startBroadcast();
 Raffle raffle = new Raffle(
     config.entranceFee,
