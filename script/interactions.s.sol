@@ -4,8 +4,13 @@ import {Script} from "forge-std/Script.sol";
 
 contract CreateSubscription is Script{
 
-function run() public{
+function CreateSubscriptionUsingConfig() public{
+    HelperConfig helperConfig = new HelperConfig();
     
+}
+
+function run() public{
+CreateSubscriptionUsingConfig();
 }
 
 
