@@ -6,11 +6,11 @@ import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VR
 
 contract CreateSubscription is Script{
 
-function CreateSubscriptionUsingConfig() public{
+function CreateSubscriptionUsingConfig() public returns(uint256,address){
     HelperConfig helperConfig = new HelperConfig();
 address vrfcoordinator = helperConfig.getConfig().vrfCoordinator;
-createSubscription(vrfcoordinator);
-
+(uint256 subId,) = createSubscription(vrfcoordinator);
+return (subId , vrfCoordinator);
 
 
 }
