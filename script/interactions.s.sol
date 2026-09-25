@@ -38,6 +38,27 @@ CreateSubscriptionUsingConfig();
 }
 
 
+contract FundSubscription is Script{
+    function fundSubscriptionUsingConfig() public{
+
+    }
+
+function run() public{
+    
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+
 /*
 LEARNING
 
@@ -123,17 +144,6 @@ Step 4: the code u written actually does Step A(that is create Subscription)
 VRFCoordinatorV2_5Mock(vrfCoordinator)
 
 just to clear the doubt we aint using mock deployment and all its just it has a function of createSubsciption id so to get that we doing all of this
-
-
-
-
-
-
-
-
-
-
-
 
 
  */
