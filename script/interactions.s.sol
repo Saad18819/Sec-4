@@ -21,7 +21,7 @@ console.log("Creating subscription on chainID:",block.chainid);
 
 
 vm.startBroadcast();
-uint256 subId = VRFCoordinatorV2_5Mock(vrfCoordinator).createSubscription();
+uint256 subId = VRFCoordinatorV2_5Mock(vrfCoordinator).createSubscription(); // here createSubscription function aint same jo uppar likha hai its the function present in vrfcoordinatomock.sol vali file and mock _5 vali me inherit hora
 vm.stopBroadcast();
 
 console.log("your subscription Id is:",subId);
@@ -35,3 +35,99 @@ CreateSubscriptionUsingConfig();
 
 
 }
+
+
+/*
+LEARNING
+
+Step 1: The Core Problem (Why VRF Exists)
+Imagine you are running a lottery in real life.
+
+Players buy tickets.
+
+At the end of the week, you pull a winning number out of a hat.
+
+Now put that lottery on Ethereum (Raffle.sol).
+Blockchains are completely deterministic—every node on the network must compute the exact same result for every line of code. Because of this, EVMs cannot generate true random numbers natively. If you try using block.timestamp or block.prevrandao, miners/validators can manipulate it to win the lottery.
+
+To get a verifiably random number, your contract has to ask an external, off-chain service: Chainlink VRF (Verifiable Random Function).
+
+
+
+
+
+
+
+
+
+
+Step 2: How Chainlink VRF Charges You (The Subscription Model)
+Chainlink nodes don't work for free. Generating a random number and submitting a cryptographic proof back to the blockchain costs gas and services.
+
+Chainlink handles payment through a Subscription Model:
+
+You create an Account / Vault (a Subscription) on Chainlink's system.
+
+You deposit LINK tokens into that subscription account to pay for future random numbers.
+
+You tell Chainlink: "Hey, my Raffle.sol contract is authorized to use the funds in this Subscription." (This is called adding a Consumer).
+
+When Raffle.sol requests a random number, Chainlink checks:
+
+Does this request come from an authorized Consumer?
+
+Is there enough LINK in the Subscription to cover the request?
+
+If yes, Chainlink sends the random number back!
+
+
+
+
+
+
+
+
+
+Step 3: The 3-Step Setup Needed for VRF
+Before Raffle.sol can ask for a single random number, three things must happen in order:
+
+[Step A: Create Subscription]  ──> Gives you a `subscriptionId` (a unique uint256 number)
+             │
+             ▼
+[Step B: Fund Subscription]    ──> Puts LINK tokens into that `subscriptionId`
+             │
+             ▼
+[Step C: Add Consumer]         ──> Registers `Raffle.sol` address to that `subscriptionId`
+
+
+If you miss any of these three steps, your contract will revert when it tries to pick a winner.
+
+
+
+
+
+
+
+
+
+
+
+
+
+VRFCoordinatorV2_5Mock(vrfCoordinator)
+
+just to clear the doubt we aint using mock deployment and all its just it has a function of createSubsciption id so to get that we doing all of this
+
+
+
+
+
+
+
+
+
+
+
+
+
+ */
