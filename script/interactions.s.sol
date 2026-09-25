@@ -25,7 +25,8 @@ uint256 subId = VRFCoordinatorV2_5Mock(vrfCoordinator).createSubscription();
 vm.stopBroadcast();
 
 console.log("your subscription Id is:",subId);
-console.log("please update the subscription in your HelperConfig.s.sol")
+console.log("please update the subscription in your HelperConfig.s.sol");
+return (subId , vrfCoordinator);
 }
 
 function run() public{
