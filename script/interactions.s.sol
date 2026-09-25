@@ -7,6 +7,7 @@ import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VR
 contract CreateSubscription is Script{
 
 function CreateSubscriptionUsingConfig() public returns(uint256,address){
+    
     HelperConfig helperConfig = new HelperConfig();
 address vrfcoordinator = helperConfig.getConfig().vrfCoordinator;
 (uint256 subId,) = createSubscription(vrfcoordinator);
@@ -48,9 +49,14 @@ Players buy tickets.
 At the end of the week, you pull a winning number out of a hat.
 
 Now put that lottery on Ethereum (Raffle.sol).
-Blockchains are completely deterministic—every node on the network must compute the exact same result for every line of code. Because of this, EVMs cannot generate true random numbers natively. If you try using block.timestamp or block.prevrandao, miners/validators can manipulate it to win the lottery.
+Blockchains are completely deterministic—every node on the network must compute the exact same result for every line of code. 
+Because of this, EVMs cannot generate true random numbers natively. 
+If you try using block.timestamp or block.prevrandao, miners/validators can manipulate it to win the lottery.
 
-To get a verifiably random number, your contract has to ask an external, off-chain service: Chainlink VRF (Verifiable Random Function).
+
+
+To get a verifiably random number,
+your contract has to ask an external, off-chain service: Chainlink VRF (Verifiable Random Function).
 
 
 
