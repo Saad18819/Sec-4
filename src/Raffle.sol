@@ -140,7 +140,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
         // require is gas expenisve coz u storing string so best is to use custom errors
 
         // another method is using errors and the most gas efficient method
-        if (msg.value <= i_entranceFee) {
+        if (msg.value < i_entranceFee) {
             revert Raffle_SendMoreToEnterRaffle();
         }
 
