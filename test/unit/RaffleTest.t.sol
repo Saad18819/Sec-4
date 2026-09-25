@@ -80,7 +80,7 @@ function testRaffleRecordsPlayerWhenTheyEnter() public{
 
 }
 
-// testing emit is little bit funky although u can refer to foundry book for the cheatcode
+// testing emit is a little bit funky although u can refer to foundry book for the cheatcode
 
 function testEnteringRaffleEmitsEvent() public{
     // Arrange
@@ -98,6 +98,7 @@ raffle.enterRaffle{value:entranceFee}();
 
 /*
 EMIT test learning
+
 1.To test whether a contract emits an event correctly in Foundry, you use the vm.expectEmit cheatcode.
 2. vm.expectEmit takes up to 5 arguments:
 3. vm.expectEmit(checkTopic1, checkTopic2, checkTopic3, checkData, emitterAddress);
@@ -113,6 +114,20 @@ checkData (bool): Set to true if you want to check non-indexed parameters (the r
 emitterAddress (address): (Optional) The contract address that must emit the event.
 
 also u gotta copy paste the event thing directly from raffle.sol to test( see at top).
+
+
+
+also in the codebase of above function
+
+The exact sequence feels completely counter-intuitive when you first see it, but here is why Foundry forces you to write it in that specific order:
+
+Think of vm.expectEmit as Setting up a Detector
+To catch the event, you have to configure the listener before the action takes place:
+
+
+When raffle.enterRaffle{value: entranceFee}() runs, the EVM executes the internal function logic in real-time. The moment emit RaffleEntered(player) inside Raffle.sol triggers, the event log is instantly written to EVM execution state and finished.
+
+If you put vm.expectEmit after raffle.enterRaffle(), the event has already happened and passed before Foundry was told to listen for it!
 
  */
 
