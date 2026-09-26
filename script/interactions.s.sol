@@ -113,7 +113,7 @@ and inside foundry.toml in remappings do
 
 and then import it here in this codebase
 and in helperconfig also make sure to deploy that mock as well 
-
+. and then u gotta go to Deploy file and then write the logic of  Fund
 
 the above process is for anvil coz we need mock for it rytt
 
@@ -149,7 +149,7 @@ console.log("To vrfCoordinator:",vrfCoordinator);
 console.log("On ChainId:",block.chainid);
 
 vm.startBroadcast();
-VRFCoordinatorV2_5Mock(vrfCoordinator).addConsumer(subId,contractToAddtoVrf);
+VRFCoordinatorV2_5Mock(vrfCoordinator).addConsumer(subId,contractToAddtoVrf); // this function is present in SubscriptionApi file
 vm.stopBroadcast();
   }
 }
@@ -157,8 +157,15 @@ vm.stopBroadcast();
 /*
 ADD CONSUMER LEARNING
 
-1. for consumer we need the latest deployed 
+1. for consumer we need the latest deployed address of the contract
+2. so for latest deployed contract go to google and search foundry devops u will get the repo and in that down there we have 
+"forge install Cyfrin/foundry-devops"
 
+3.also its already provided in the repo what update u gotta do in foundry.toml
+4.and then u gotta import
+"import {DevOpsTools} from "lib/foundry-devops/src/DevOpsTools.sol";"
+5 first write the logic here and then u gotta go to Deploy file and write the logic of Add consumer
+6. make sure to do import crctly in deploy file
 
 
 git add .

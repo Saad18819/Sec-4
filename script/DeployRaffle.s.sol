@@ -46,6 +46,10 @@ Raffle raffle = new Raffle(
 );
 vm.stopBroadcast();
 
+/*
+First we need to deploy a contract and then gotta add a consumer coz to add consumer u need a deployed contract address
+also u dont need to broadcast coz broadcast toh interaction me kar diya tha already
+ */
 AddConsumer addConsumer = new AddConsumer();
 addConsumer.addConsumer(address(raffle),config.vrfCoordinator, config.subscriptionId);
 return (raffle, helperconfig);

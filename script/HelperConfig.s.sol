@@ -122,9 +122,9 @@ link:0x779877A7B0D9E8603169DdbD7836e478b4624789 // // gotta search it up on chai
 
 function getOrCreateAnvilEthCOnfig() public returns(NetworkConfig memory){
     // we will first check if we have set an active network config
-   if(localNetworkConfig.vrfCoordinator != address(0)){
-    return localNetworkConfig;
-   } 
+   if(networkConfigs[LOCAL_CHAIN_ID].vrfCoordinator != address(0)){
+        return networkConfigs[LOCAL_CHAIN_ID];
+    } 
 // Deploy mocks and such...look at the import thing to locate the file of the mock
 vm.startBroadcast();
 VRFCoordinatorV2_5Mock vrfCoordinatorMock = new VRFCoordinatorV2_5Mock(MOCK_BASE_FEE,MOCK_GAS_PRICE_LINK ,MOCK_WEI_PER_UINT_LINK);

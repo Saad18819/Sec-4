@@ -145,8 +145,6 @@ function testDontAllowPlayersToEnterWhileRaffleIsCalculating() public{
     vm.prank(PLAYER);
     raffle.enterRaffle{value:entranceFee}();
 
-
-
 }
 /*
 vm.roll explanation
@@ -161,6 +159,33 @@ It is standard practice to use both together so the block environment matches re
 
  */
 
+function testCheckUpKeepReturnsFalseIfItHasNoBalance() public{
+    // Arrange
+    vm.warp(block.timestamp + interval +1);
+    vm.roll(block.number +1);
+
+    // Act
+    (bool upKeepNeeded , ) = raffle.checkUpkeep ("");
+     
+     // Assert
+     assert(!upKeepNeeded);
+}
+
+function testCheckUpKeepReturnsFalseIfRaffleIsntOpen() public{
+
+// ARRANGE
+     vm.prank(PLAYER);
+    raffle.enterRaffle{value:entranceFee}();
+    vm.warp(block.timestamp + interval + 1); 
+    vm.roll(block.number + 1); 
+    raffle.performUpKeep(""); 
+
+// ACT
+(bool upkeepNeeded,) = raffle.checkUpkeep("");
+
+// Assert
+assert(!upkeepNeeded);
+}
 
 }
 
