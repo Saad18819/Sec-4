@@ -4,7 +4,7 @@ import {Script,console} from "forge-std/Script.sol";
 import {HelperConfig,CodeConstants} from "./HelperConfig.s.sol";
 import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
 import {LinkToken} from "test/mocks/LinkToken.sol";
-
+import {DevOpsTools} from "lib/foundry-devops/src/DevOpsTools.sol";
 
 contract CreateSubscription is Script{
 
@@ -96,8 +96,73 @@ fundSubscriptionUsingConfig();
 }
 
 }
+/*
+
+FUND CONTRACT LEARNING
 
 
+for FUND contract also make sure
+
+make a folder of mocks inside test folder and inside that LinkToken.sol thing and then on just google search 
+github linktoken.sol u will get the repo, copy the code and paste it
+
+and in linktoken we are importing erc 20 solmate something so for that search on google solmate github to check the version of it and copy the actual url of that github and then in termianl write
+"forge install URL@version"
+and inside foundry.toml in remappings do
+'@solmate=lib/solmate/src/'
+
+and then import it here in this codebase
+and in helperconfig also make sure to deploy that mock as well 
+
+
+the above process is for anvil coz we need mock for it rytt
+
+
+
+
+ */
+
+
+
+
+
+
+
+contract AddConsumer is Script{
+
+  function run() external{
+    address mostRecentDeployed = DevOpsTools.get_most_recent_deployment("Raffle",block.chainid);
+    addConsumerUsingConfig( mostRecentDeployed);
+  }
+
+  function addConsumerUsingConfig(address mostRecentDeployed) public{
+    HelperConfig helperConfig = new HelperConfig();
+    uint256 subId = helperConfig.getConfig().subscriptionId;
+    address vrfCoordinator = helperConfig.getConfig().vrfCoordinator;
+addConsumer(mostRecentDeployed,vrfCoordinator,subId);
+  }
+
+
+  function addConsumer(address contractToAddtoVrf, address vrfCoordinator , uint256 subId) public{
+console.log("Adding consumer contract:",contractToAddtoVrf);
+console.log("To vrfCoordinator:",vrfCoordinator);
+console.log("On ChainId:",block.chainid);
+
+vm.startBroadcast();
+
+vm.stopBroadcast();
+  }
+}
+
+/*
+ADD CONSUMER LEARNING
+
+1. for consumer we need the latest deployed 
+
+
+
+
+ */
 
 
 
@@ -195,20 +260,6 @@ just to clear the doubt we aint using mock deployment and all its just it has a 
 
 
 
-for FUND contract also make sure
 
-make a folder of mocks inside test folder and inside that LinkToken.sol thing and then on just google search 
-github linktoken.sol u will get the repo, copy the code and paste it
-
-and in linktoken we are importing erc 20 solmate something so for that search on google solmate github to check the version of it and copy the actual url of that github and then in termianl write
-"forge install URL@version"
-and inside foundry.toml in remappings do
-'@solmate=lib/solmate/src/'
-
-and then import it here in this codebase
-and in helperconfig also make sure to deploy that mock as well 
-
-
-the above process is for anvil coz we need mock for it rytt
 
  */
