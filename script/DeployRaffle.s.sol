@@ -11,8 +11,8 @@ import {CreateSubscription,FundSubscription, AddConsumer} from "./interactions.s
 
 contract DeployRaffle is Script{
 
-function run() public returns(Raffle,HelperConfig){
-return deployContract();
+function run() public {
+deployContract();
 }
 
 function deployContract() public returns(Raffle, HelperConfig) {

@@ -149,7 +149,7 @@ console.log("To vrfCoordinator:",vrfCoordinator);
 console.log("On ChainId:",block.chainid);
 
 vm.startBroadcast();
-VRFCoordinatorv2_5Mock(vrfCoordinator).addConsumer(subId,contractToAddtoVrf);
+VRFCoordinatorV2_5Mock(vrfCoordinator).addConsumer(subId,contractToAddtoVrf);
 vm.stopBroadcast();
   }
 }
