@@ -149,7 +149,7 @@ console.log("To vrfCoordinator:",vrfCoordinator);
 console.log("On ChainId:",block.chainid);
 
 vm.startBroadcast();
-
+VRFCoordinatorv2_5Mock(vrfCoordinator)
 vm.stopBroadcast();
   }
 }
@@ -161,7 +161,9 @@ ADD CONSUMER LEARNING
 
 
 
-
+git add .
+git commit -m "fix: updated scripts and tests"
+git push
  */
 
 
