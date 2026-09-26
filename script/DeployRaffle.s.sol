@@ -5,7 +5,7 @@ pragma solidity 0.8.19;
 import {Script} from "forge-std/Script.sol";
 import {Raffle} from "../src/Raffle.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
-import {CreateSubscription} from "./interactions.s.sol";
+import {CreateSubscription,FundSubscription, AddConsumer} from "./interactions.s.sol";
 
 
 
@@ -26,6 +26,12 @@ if(config.subscriptionId==0){
     // create subscription
 CreateSubscription  createSubs = new CreateSubscription();
    (config.subscriptionId , config.vrfCoordinator) = createSubs.createSubscription(config.vrfCoordinator);
+
+// Fund It
+FundSubscription fundSubscription = new FundSubscription();
+fundSubscription.fundSubscription(config.vrfCoordinator ,config.subscriptionId,config.link);
+
+
 }
 
 
@@ -39,6 +45,9 @@ Raffle raffle = new Raffle(
     config.callbackGasLimit
 );
 vm.stopBroadcast();
+
+AddConsumer addConsumer = new AddConsumer();
+addConsumer.addConsumer(address(raffle),config.vrfCoordinator, config.subscriptionId);
 return (raffle, helperconfig);
 
 }
