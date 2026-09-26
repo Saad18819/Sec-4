@@ -70,6 +70,27 @@ vm.stopBroadcast();
 }
 }
 
+/*
+LEARNING
+
+1. On Local Chain (Anvil0
+
+On your local Anvil chain, you don't actually need real LINK tokens or a real ERC-20 transfer process to get funds into the VRF subscription. The Chainlink mock contract (VRFCoordinatorV2_5Mock) includes a special cheat helper function named .fundSubscription(subId, amount).
+
+Calling this helper directly mints fake balance straight into your subscription inside the mock coordinator storage mapping—bypassing the need for any LINK token contract interactions.
+
+
+
+2. On Real Networks (Sepolia / Mainnet)
+
+On a live testnet like Sepolia, the official Chainlink VRF Coordinator contract does not have a cheat function like .fundSubscription(...).
+
+Instead, Chainlink uses the ERC-677 token standard (which extends ERC-20 with transferAndCall). You must interact directly with the actual LINK Token contract, transfer LINK to the VRF Coordinator's contract address, and pass the subscriptionId in the data payload (abi.encode(subscriptionId)). The VRF Coordinator receives the tokens, reads the encoded subId from the call, and credits your subscription balance.
+
+
+
+ */
+
 function run() public{
 fundSubscriptionUsingConfig();
 }
