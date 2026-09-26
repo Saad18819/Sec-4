@@ -3,7 +3,7 @@ pragma solidity 0.8.19;
 
 import {Script} from "forge-std/Script.sol";
 import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
-
+import {LinkToken} from "test/mocks/LinkToken.sol";
 
 abstract contract CodeConstants{
 /* VRF MOCK VALUES */
@@ -43,6 +43,7 @@ contract HelperConfig is CodeConstants, Script{
         bytes32 gasLane;
         uint256 subscriptionId;
         uint32 callbackGasLimit;
+        address link;
     }
 
 /*
@@ -103,7 +104,8 @@ interval :30, // 30 sec
 vrfCoordinator:0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625, // gotta search it up on chainlink vrf supported network site
 gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae, // same as above
 callbackGasLimit:500000,// 500,000 gas
-subscriptionId: 0
+subscriptionId: 0,
+link:0x779877A7B0D9E8603169DdbD7836e478b4624789 // // gotta search it up on chainlink vrf supported network site
 
 
        });
@@ -126,6 +128,7 @@ function getOrCreateAnvilEthCOnfig() public returns(NetworkConfig memory){
 // Deploy mocks and such...look at the import thing to locate the file of the mock
 vm.startBroadcast();
 VRFCoordinatorV2_5Mock vrfCoordinatorMock = new VRFCoordinatorV2_5Mock(MOCK_BASE_FEE,MOCK_GAS_PRICE_LINK ,MOCK_WEI_PER_UINT_LINK);
+LinkToken linkToken = new LinkToken();
 vm.stopBroadcast();
 
 
@@ -137,8 +140,8 @@ vrfCoordinator:address(vrfCoordinatorMock),
 // here gaslane address and callback doesnt matter vrfcoordinator address of mock will figure that out so here u write anything
 gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae, // same as above
 callbackGasLimit:500000,// 500,000 gas
-subscriptionId: 0
-
+subscriptionId: 0,
+link:address(linkToken)
 });
 
 return localNetworkConfig;

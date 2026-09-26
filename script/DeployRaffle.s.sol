@@ -25,7 +25,7 @@ HelperConfig.NetworkConfig memory config = helperconfig.getConfig();
 if(config.subscriptionId==0){
     // create subscription
 CreateSubscription  createSubs = new CreateSubscription();
-   (config.subscriptionId , config.vrfCoordinator) = creatSubs.createSubscription(config.vrfCoordinator);
+   (config.subscriptionId , config.vrfCoordinator) = createSubs.createSubscription(config.vrfCoordinator);
 }
 
 

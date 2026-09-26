@@ -39,19 +39,26 @@ CreateSubscriptionUsingConfig();
 
 
 contract FundSubscription is Script{
-uint256 public constant FUND_AMOUNT = 3 ether // 3 LINKS coz link also have this 18 decimal thing
+uint256 public constant FUND_AMOUNT = 3 ether;// 3 LINKS coz link also have this 18 decimal thing
 
 
     function fundSubscriptionUsingConfig() public{
   HelperConfig helperConfig = new HelperConfig();
 address vrfcoordinator = helperConfig.getConfig().vrfCoordinator;
 uint256 subscriptionId = helperConfig.getConfig().subscriptionId;
+address linkToken = he;perConfig.getConfig().link;
+fundSubscription(vrfCoordinator,subscriptionId,linkToken);
+}
 
-
-    }
+function fundSubscription(address vrfCoordinator , uint256 subscriptionId , address linkToken) public{
+console.log("Funding subscription:",subscriptionId);
+console.log("Using vrfCoordinator:",vrfCoordinator);
+console.log("On ChainId:",block.chainid);
+// 7:38 mins
+}
 
 function run() public{
-
+fundSubscriptionUsingConfig();
 }
 
 }
