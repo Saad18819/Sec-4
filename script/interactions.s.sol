@@ -66,6 +66,7 @@ vm.stopBroadcast();
  vm.startBroadcast();
  LinkToken(linkToken).transferAndCall(vrfCoordinator, FUND_AMOUNT , abi.encode(subscriptionId));
 vm.stopBroadcast();
+// here dont think much abt transferAndCall just remember its a special link token function
 }
 }
 
@@ -171,5 +172,22 @@ VRFCoordinatorV2_5Mock(vrfCoordinator)
 
 just to clear the doubt we aint using mock deployment and all its just it has a function of createSubsciption id so to get that we doing all of this
 
+
+
+for FUND contract also make sure
+
+make a folder of mocks inside test folder and inside that LinkToken.sol thing and then on just google search 
+github linktoken.sol u will get the repo, copy the code and paste it
+
+and in linktoken we are importing erc 20 solmate something so for that search on google solmate github to check the version of it and copy the actual url of that github and then in termianl write
+"forge install URL@version"
+and inside foundry.toml in remappings do
+'@solmate=lib/solmate/src/'
+
+and then import it here in this codebase
+and in helperconfig also make sure to deploy that mock as well 
+
+
+the above process is for anvil coz we need mock for it rytt
 
  */
