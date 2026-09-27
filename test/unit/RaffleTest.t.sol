@@ -217,7 +217,7 @@ function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public{
 
     // Act/Assert
     vm.expectRevert(abi.encodeWithSelector(Raffle.Raffle_UpkeepNotNeeded.selector ,currentBalance , numPlayers,rState));
-
+// when we have custom error with paramater then thats how u write
     raffle.performUpKeep("");
 
 }
