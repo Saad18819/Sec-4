@@ -196,7 +196,11 @@ assert(!upkeepNeeded);
 
 /*
 STEPS
-after writing basic test do forge build and forge test
+1.after writing basic test do forge build and forge test
+2.do forge coverage to check how much percent you have did
+3."forge coverage --report debug"
+
+
  */
 
 
