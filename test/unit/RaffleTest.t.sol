@@ -187,6 +187,37 @@ function testCheckUpKeepReturnsFalseIfRaffleIsntOpen() public{
 assert(!upkeepNeeded);
 }
 
+
+
+// CHALLENGE AND HOMEWORK QUESTION(solns in github repo) as we have discovered from coverage debug these are not covered yet
+// testCheckUpkeepReturnsFalseIfEnoughTimeHasPassed
+//testCheckUpkeepReturnsTrueWhenParameterAreGood
+
+function testPerformUpkeepCanOnlyRunIfCheckUpkeepIsTrue() public{
+// Arrange
+    vm.prank(PLAYER);
+    raffle.enterRaffle{value:entranceFee}();
+    vm.warp(block.timestamp + interval + 1); 
+    vm.roll(block.number + 1); 
+
+// Act/Assert
+ raffle.performUpKeep(""); 
+
+}
+
+function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public{
+    // Arrange
+    uint256 currentBalance = 0;
+    uint256 numPlayers = 0;
+    Raffle.RaffleState rState = raffle.getRaffleState();
+
+    // Act/Assert
+    vm.expectRevert(
+        abi.encodeWithSelector(Raffle.Raffle_UpkeepNotNeeded.selector ,currentBalance , numPlayers,rState);
+    );
+    raffle.performUpkeep("");
+    
+}
 }
 
 
@@ -200,6 +231,13 @@ STEPS
 2.do forge coverage to check how much percent you have did
 3."forge coverage --report debug > coverage.txt"
 The above command will create a file called coverage.txt, containing the specific lines of code that have not been covered yet.
+
+ */
+
+/*
+FORGE COVERAGE LESRNING
+
+geberally check function and branches coz line and statements toh kaafi rahege and when i went through coverage so we realisez inside construcotr we havent checked all the variables
 
  */
 
