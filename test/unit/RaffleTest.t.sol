@@ -198,7 +198,7 @@ assert(!upkeepNeeded);
 STEPS
 1.after writing basic test do forge build and forge test
 2.do forge coverage to check how much percent you have did
-3."forge coverage --report debug"
+3."forge coverage --report debug > coverage.txt"
 The above command will create a file called coverage.txt, containing the specific lines of code that have not been covered yet.
 
  */
