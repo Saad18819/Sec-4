@@ -211,6 +211,7 @@ function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public{
     uint256 numPlayers = 0;
     Raffle.RaffleState rState = raffle.getRaffleState();
     vm.prank(PLAYER);
+    raffle.enterRaffle{value:entranceFee}();
 
     // Act/Assert
     vm.expectRevert(
