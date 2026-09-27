@@ -218,7 +218,7 @@ function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public{
     // Act/Assert
     vm.expectRevert(abi.encodeWithSelector(Raffle.Raffle_UpkeepNotNeeded.selector ,currentBalance , numPlayers,rState));
 
-    raffle.performUpkeep("");
+    raffle.performUpKeep("");
 
 }
 }
