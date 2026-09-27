@@ -210,13 +210,14 @@ function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public{
     uint256 currentBalance = 0;
     uint256 numPlayers = 0;
     Raffle.RaffleState rState = raffle.getRaffleState();
+    vm.prank(PLAYER);
 
     // Act/Assert
     vm.expectRevert(
         abi.encodeWithSelector(Raffle.Raffle_UpkeepNotNeeded.selector ,currentBalance , numPlayers,rState);
     );
     raffle.performUpkeep("");
-    
+
 }
 }
 
