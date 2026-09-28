@@ -241,12 +241,59 @@ function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId() public raffleEnt
     vm.roll(block.number + 1); 
 */
     // Act
-    vm.recordLogs();
-    raffle.performUpKeep("");
-    Vm.Log[] memory entries = vm.getRecordedLogs();
-    // u can go to Vm.sol and can see the Log struct what all its gonna store
-    // whenever we want to get RequestId in the raffle we would just need to find the event or log that was emitted and then grab the first topic from it
-bytes32 requestId = entries[1].topics[1];
+    vm.recordLogs(); // vm.recordLogs() tells Forge’s Virtual Machine to start recording every EVM event (log) emitted by any contract from that point forward.
+    raffle.performUpKeep(""); // Trigger the action that emits events
+    Vm.Log[] memory entries = vm.getRecordedLogs(); 
+    bytes32 requestId = entries[1].topics[1];
+    /*
+
+   vm.getRecordedLogs() does two things simultaneously:
+
+1.Fetches and returns an array containing every EVM event emitted since vm.recordLogs() was called.
+2.Resets/clears the internal log recorder buffer in Foundry.
+
+
+u can go to Vm.sol and can see the Log struct what all its gonna store
+Whenever we want to get RequestId in the raffle we would just need to find the event or log that was emitted and then grab the first topic from it
+    
+EXPLANATION
+    bytes32 requestId = entries[1].topics[1];
+This single line extracts the requestId from the captured events. Here is the breakdown of why both 1s exist:
+
+
+    1. Why entries[1]? (The Outer 1)
+entries is an array of all events emitted across every contract during the execution of raffle.performUpKeep("").
+
+When performUpKeep runs, it actually triggers two separate events in chronological order:
+
+entries[0] (First Event): Emitted inside the external Chainlink VRF Coordinator contract (RandomWordsRequested).
+
+entries[1] (Second Event): Emitted inside your Raffle contract (e.g., RequestedRaffleWinner(requestId)).
+
+You use entries[1] because you specifically want the event emitted by your Raffle contract, which was recorded second in line.
+
+
+The topics array inside any event log is arranged like this:
+
+topics[0]: Reserved for the Event Signature Hash (e.g., keccak256("RequestedRaffleWinner(uint256)")). It tells the EVM which event was emitted.
+
+topics[1]: The 1st indexed parameter of that event.
+
+topics[2]: The 2nd indexed parameter (if it exists).
+
+Since requestId is declared as an indexed variable in your Solidity event definition:
+
+The requestId value gets stored directly at topics[1].
+
+Summary
+entries[1].topics[1] simply translates to:
+
+"Go to the 2nd event recorded (entries[1]), and grab its 1st indexed parameter (topics[1])."
+    
+    
+     */ 
+    
+
 
 // Assert
 Raffle.RaffleState raffleState = raffle.getRaffleState();
