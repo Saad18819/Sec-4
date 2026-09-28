@@ -290,6 +290,7 @@ if(!upKeepNeeded){
 // Redundant : unnecessarily repetitive
 // the below emit is redundant coz in vrfcoordinatorv2_mock we have requesId there as well and its emitting the event there too
 emit RequestedRaffleWinner(requestId);
+      
         /*
         so basically in above code we have the access to s_vrfCoordinator so basically we requested a random word and then inside it is a whole bunch of stuff in here
         basically in lib/chainlink/contracts/vrf/dev/libraries we have VRF COORDINATOR V2 interface thing and in that we have struct which have all the datas in it
