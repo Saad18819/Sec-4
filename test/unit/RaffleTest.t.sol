@@ -6,7 +6,7 @@ import {Test} from "forge-std/Test.sol";
 import {DeployRaffle} from "../../script/DeployRaffle.s.sol";
 import {Raffle} from "src/Raffle.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
-import {Vm} from "forge-std/Vm.sol";
+import {Vm} from "forge-std/Vm.sol"; // u are exporting this for VM.Log thing
 
 
 
@@ -297,7 +297,7 @@ entries[1].topics[1] simply translates to:
 
 // Assert
 Raffle.RaffleState raffleState = raffle.getRaffleState();
-assert(uint256(requestId) > 0);
+assert(uint256(requestId) > 0); // requestId is returned as a bytes32 datatype, which is a raw 32-byte (256-bit) hexadecimal byte array.
 assert(uint256(raffleState) == 1);
 
 
