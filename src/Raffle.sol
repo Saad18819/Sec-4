@@ -109,7 +109,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
-
+event RequestedRaffleWinner(uint256 indexed requestId);
 
 
     // whenever u inherit a contract which has constructor then you need to add the inherited contracts constructor
@@ -287,7 +287,9 @@ if(!upKeepNeeded){
         });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
         // we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
-
+// Redundant : unnecessarily repetitive
+// the below emit is redundant coz in vrfcoordinator requesId there as well its emitting the event
+emit RequestedRaffleWinner(requestId);
         /*
         so basically in above code we have the access to s_vrfCoordinator so basically we requested a random word and then inside it is a whole bunch of stuff in here
         basically in lib/chainlink/contracts/vrf/dev/libraries we have VRF COORDINATOR V2 interface thing and in that we have struct which have all the datas in it
@@ -297,6 +299,8 @@ if(!upKeepNeeded){
         we also add subscriptio ID into the constructor so your contracts knows which chainlink accnt to charge for randomness
         we make requestConfirmations as a constant number
         we also add callbackGasLimit into the constructor
+
+        whenever we call a requestRandomWords it always returns a requestId
          */
     }
 
