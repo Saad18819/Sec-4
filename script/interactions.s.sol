@@ -161,6 +161,7 @@ console.log("On ChainId:",block.chainid);
 vm.startBroadcast();
 VRFCoordinatorV2_5Mock(vrfCoordinator).addConsumer(subId,contractToAddtoVrf); // this function is present in SubscriptionApi file
 vm.stopBroadcast();
+// contractToAddtoVrf means deployed contract ka address
   }
 }
 
@@ -173,7 +174,7 @@ ADD CONSUMER LEARNING
 
 3.also its already provided in the repo what update u gotta do in foundry.toml
 4.and then u gotta import
-"import {DevOpsTools} from "lib/foundry-devops/src/DevOpsTools.sol";"
+"import {DevOpsTools} from "lib/foundry-devops/src/DevOpsTools.sol";
 5 first write the logic here and then u gotta go to Deploy file and write the logic of Add consumer
 6. make sure to do import crctly in deploy file
 
