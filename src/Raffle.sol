@@ -288,7 +288,7 @@ if(!upKeepNeeded){
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
         // we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
 // Redundant : unnecessarily repetitive
-// the below emit is redundant coz in vrfcoordinatorv2_mock we have requesId there as well and its emitting the event there too
+// the below emit is redundant coz in vrfcoordinatorv2_mock we have requesId there as well and its emitting the event there too but we gonna write it here as well just to make our test testing easier
 emit RequestedRaffleWinner(requestId);
       
         /*
