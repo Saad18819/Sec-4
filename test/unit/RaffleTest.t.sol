@@ -240,7 +240,7 @@ The above command will create a file called coverage.txt, containing the specifi
 /*
 FORGE COVERAGE LESRNING
 
-geberally check function and branches coz line and statements toh kaafi rahege and when i went through coverage so we realisez inside construcotr we havent checked all the variables
+generally check function and branches coz line and statements toh kaafi rahege and when i went through coverage so we realisez inside construcotr we havent checked all the variables
 
  */
 
