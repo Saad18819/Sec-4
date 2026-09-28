@@ -65,6 +65,15 @@ vm.stopBroadcast();
 }else{
  vm.startBroadcast();
  LinkToken(linkToken).transferAndCall(vrfCoordinator, FUND_AMOUNT , abi.encode(subscriptionId));
+ /*linkToken: The address of the live, real LINK token contract on Sepolia.
+
+LinkToken(...): The ABI / interface wrapper that tells Solidity 
+"Hey, at this address on Sepolia, 
+there is a function called transferAndCall(address, uint256, bytes)—encode the call for me."
+for mainnet or sepolia or any real netowrk u dont need to deploy that LinkToken.sol thing like after importing it will work fine as well but yeah u need That linktoken file 
+but for anvil and local testing u gotta be deploying it
+
+*/
 vm.stopBroadcast();
 // here dont think much abt transferAndCall just remember its a special link token function
 }
@@ -73,7 +82,7 @@ vm.stopBroadcast();
 /*
 LEARNING
 
-1. On Local Chain (Anvil0
+1. On Local Chain (Anvil)
 
 On your local Anvil chain, you don't actually need real LINK tokens or a real ERC-20 transfer process to get funds into the VRF subscription. The Chainlink mock contract (VRFCoordinatorV2_5Mock) includes a special cheat helper function named .fundSubscription(subId, amount).
 
@@ -117,6 +126,7 @@ and in helperconfig also make sure to deploy that mock as well
 
 the above process is for anvil coz we need mock for it rytt
 
+In Solidity, LinkToken(linkToken) is an interface/type casting wrapper (or instantiation) that tells the compiler how to interact with the contract deployed at the address stored in the variable linkToken.
 
 
 
