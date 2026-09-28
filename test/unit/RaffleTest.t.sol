@@ -6,7 +6,7 @@ import {Test} from "forge-std/Test.sol";
 import {DeployRaffle} from "../../script/DeployRaffle.s.sol";
 import {Raffle} from "src/Raffle.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
-
+import {Vm} from "forge-std/Vm.sol";
 
 
 
@@ -231,6 +231,13 @@ function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId() public{
     raffle.enterRaffle{value:entranceFee}();
     vm.warp(block.timestamp + interval + 1); 
     vm.roll(block.number + 1); 
+
+    // Act
+    vm.recordLogs();
+    raffle.performUpkeep("");
+    Vm.Log[] memory entries = vm.getRecordedLogs();
+    // u can go to Vm.sol and can see the Log struct what all its gonna store
+    // whenever we want to get RequestId in the raffle we would just need to find the event or log that was emitted and then grab the first topic from it
 
 
 }
