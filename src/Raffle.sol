@@ -286,7 +286,7 @@ if(!upKeepNeeded){
             extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: false})) // this is where we can set some extra arguments depending on the chainlink VRF version(based on version u can pay with different things like native eth instead of LINK)...LINK is the native ERC-20 utility token of the Chainlink network. It serves as payment to the decentralized oracle network for generating provably fair random numbers and delivering them on-chain.
         });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
-        // we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus
+        // we send a request for a random number to the VRF coordinator, using the s_vrfCoordinator variable inherited from VRFConsumerBaseV2Plus and  whenever we call a requestRandomWords it always returns a requestId
 // Redundant : unnecessarily repetitive
 // the below emit is redundant coz in vrfcoordinatorv2_mock we have requesId there as well and its emitting the event there too but we gonna write it here as well just to make our test testing easier
 emit RequestedRaffleWinner(requestId);
@@ -301,7 +301,7 @@ emit RequestedRaffleWinner(requestId);
         we make requestConfirmations as a constant number
         we also add callbackGasLimit into the constructor
 
-        whenever we call a requestRandomWords it always returns a requestId
+       
          */
     }
 
