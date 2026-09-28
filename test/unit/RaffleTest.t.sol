@@ -234,16 +234,16 @@ function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId() public{
 
     // Act
     vm.recordLogs();
-    raffle.performUpkeep("");
+    raffle.performUpKeep("");
     Vm.Log[] memory entries = vm.getRecordedLogs();
     // u can go to Vm.sol and can see the Log struct what all its gonna store
     // whenever we want to get RequestId in the raffle we would just need to find the event or log that was emitted and then grab the first topic from it
-bytes 32 requestId = entries[1].topics[1];
+bytes32 requestId = entries[1].topics[1];
 
 // Assert
 Raffle.RaffleState raffleState = raffle.getRaffleState();
 assert(uint256(requestId) > 0);
-assert(uint256(raffleState) ==1);
+assert(uint256(raffleState) == 1);
 
 
 }
