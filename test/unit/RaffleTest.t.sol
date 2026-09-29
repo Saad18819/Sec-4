@@ -228,6 +228,7 @@ function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public{
 // when we have custom error with paramater then thats how u write
     raffle.performUpKeep("");
  // time hasnt passed so coz of that the performUpKeep gonna revert
+ // although in main function we have typecasted the raffle state value but whenever u write paramter in abi.encode u dont typecast it automatically under the hood figure it out
 }
 
 // what if we need to get data from emitted events in our tests?
