@@ -59,7 +59,7 @@ console.log("On ChainId:",block.chainid);
 
 if(block.chainid == LOCAL_CHAIN_ID ){
   vm.startBroadcast();
-  VRFCoordinatorV2_5Mock(vrfCoordinator).fundSubscription(subscriptionId , FUND_AMOUNT);
+  VRFCoordinatorV2_5Mock(vrfCoordinator).fundSubscription(subscriptionId , FUND_AMOUNT * 100); // coz when we ran the test with just Fund_AMOUNT we were getting the error of insufficient balance so we multiplied it by 100 to make it work
 vm.stopBroadcast();
 
 }else{

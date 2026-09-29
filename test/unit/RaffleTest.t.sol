@@ -8,7 +8,7 @@ import {Raffle} from "src/Raffle.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
 import {Vm} from "forge-std/Vm.sol"; // u are exporting this for VM.Log thing
 import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
-
+import {console} from "forge-std/console.sol";
 
 contract Raffletest is Test{
     Raffle public raffle;
@@ -17,7 +17,7 @@ contract Raffletest is Test{
     address public PLAYER = makeAddr("player");
     uint256 public constant STARTING_PLAYER_BALANCE = 10 ether;
  
-
+// u only write even of that thing for which u goota do vm.expectEmit for vm.recordLogs and all u dont have to
  event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
 
@@ -432,13 +432,20 @@ address expectedWinner = address(1);
     }
 uint256 startingTimeStamp = raffle.getLastTimeStamp();
 uint256 winnerStartingBalance = expectedWinner.balance;
+
 // Act  (we want the request id so that is how we generate it )
 
 
 vm.recordLogs(); 
     raffle.performUpKeep(""); 
     Vm.Log[] memory entries = vm.getRecordedLogs(); 
+    console.log("Entries length:", entries.length);
+console.logBytes32(entries[0].topics[0]);
+console.logBytes32(entries[1].topics[1]);
+
+
     bytes32 requestId = entries[1].topics[1];
+    console.log("Parsed Request ID:", uint256(requestId));
     VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(uint256(requestId) , address(raffle));
     //the above line shld give random num to our raffle and the fulfillrandomWords function is present vrfcoordinator mock
 
@@ -457,7 +464,7 @@ assert(winnerBalance == winnerStartingBalance + prize);
 assert(endingTimeStamp > startingTimeStamp);
 }
 
-// 9:46
+
 }
 
 
