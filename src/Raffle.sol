@@ -385,7 +385,13 @@ function getPlayer(uint256 indexOfPlayer) external view returns(address){
 }
 
 
+function getLastTimeStamp() external view returns(uint256){
+    return s_lastTimeStamp;
+}
 
+function getRecentWinner() external view returns(address){
+return s_recentWinner;
+}
 
 
 }

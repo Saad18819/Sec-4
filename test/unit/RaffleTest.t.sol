@@ -412,6 +412,43 @@ VRFCoordinatorV2_5Mock(...).fulfillRandomWords(...): Mimics Chainlink VRF attemp
 The Verdict: If someone (or Chainlink) tries to fulfill a randomRequestId before performUpkeep has officially registered that request, the VRF Coordinator will revert with InvalidRequest across all possible request IDs.
  */
 
+
+
+
+
+// FINAL GIANT TEST(end-to-end test which will be a baseline for integration test as well)
+
+function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney() public raffleEntered{
+    // Arrange
+    uint256 additionalEntrants = 3 // 4 total
+    uint256 startingIndex = 1;
+
+    for(uint256 i = startingIndex ; i<(startingIndex + additionalEntrants);i++){
+        address newPlayer = address(uint160(i));
+        hoax(newPlayer ,1 ether);
+        raffle.enterRaffle{value:entranceFee}();
+    }
+uint256 startingTimeStamp = raffle.getLastTimeStamp();
+
+// Act  (we want the request id so that is how we generate it )
+
+
+vm.recordLogs(); 
+    raffle.performUpKeep(""); 
+    Vm.Log[] memory entries = vm.getRecordedLogs(); 
+    bytes32 requestId = entries[1].topics[1];
+    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(uint256(requestId) , address(raffle));
+    //the above line shld give random num to our raffle and the fulfillrandomWords function is present vrfcoordinator mock
+
+
+// Assert
+
+address recentWinner = raffle.getRecentWinner();
+Raffle.RaffleState rState = raffle.getRaffleState();
+
+}
+
+
 }
 
 
