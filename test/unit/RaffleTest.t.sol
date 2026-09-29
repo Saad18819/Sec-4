@@ -445,6 +445,9 @@ vm.recordLogs();
 
 address recentWinner = raffle.getRecentWinner();
 Raffle.RaffleState rState = raffle.getRaffleState();
+uint256 winnerBalance = recentWinner.balance;
+uint256 endingTimeStamp = raffle.getLastTimeStamp();
+uint256 prize = raffleEntranceFee * (additionalEntrants + 1);
 
 }
 
