@@ -420,8 +420,10 @@ The Verdict: If someone (or Chainlink) tries to fulfill a randomRequestId before
 
 function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney() public raffleEntered{
     // Arrange
-    uint256 additionalEntrants = 3 // 4 total
+    uint256 additionalEntrants = 3; // 4 total
     uint256 startingIndex = 1;
+address expectedWinner = address(1);
+
 
     for(uint256 i = startingIndex ; i<(startingIndex + additionalEntrants);i++){
         address newPlayer = address(uint160(i));
@@ -429,7 +431,7 @@ function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney() public raffleEn
         raffle.enterRaffle{value:entranceFee}();
     }
 uint256 startingTimeStamp = raffle.getLastTimeStamp();
-
+uint256 winnerStartingBalance = expectedWinner.balance;
 // Act  (we want the request id so that is how we generate it )
 
 
@@ -447,11 +449,15 @@ address recentWinner = raffle.getRecentWinner();
 Raffle.RaffleState rState = raffle.getRaffleState();
 uint256 winnerBalance = recentWinner.balance;
 uint256 endingTimeStamp = raffle.getLastTimeStamp();
-uint256 prize = raffleEntranceFee * (additionalEntrants + 1);
+uint256 prize = entranceFee * (additionalEntrants + 1);
 
+assert(recentWinner == expectedWinner);
+assert(uint256(rState )==0);
+assert(winnerBalance == winnerStartingBalance + prize);
+assert(endingTimeStamp > startingTimeStamp);
 }
 
-
+// 9:46
 }
 
 
