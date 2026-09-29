@@ -227,7 +227,7 @@ function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public{
     vm.expectRevert(abi.encodeWithSelector(Raffle.Raffle_UpkeepNotNeeded.selector ,currentBalance , numPlayers,rState));
 // when we have custom error with paramater then thats how u write
     raffle.performUpKeep("");
-
+ // time hasnt passed so coz of that the performUpKeep gonna revert
 }
 
 // what if we need to get data from emitted events in our tests?
