@@ -7,7 +7,7 @@ import {DeployRaffle} from "../../script/DeployRaffle.s.sol";
 import {Raffle} from "src/Raffle.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
 import {Vm} from "forge-std/Vm.sol"; // u are exporting this for VM.Log thing
-
+import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
 
 
 contract Raffletest is Test{
@@ -136,6 +136,16 @@ To catch the event, you have to configure the listener before the action takes p
 When raffle.enterRaffle{value: entranceFee}() runs, the EVM executes the internal function logic in real-time. The moment emit RaffleEntered(player) inside Raffle.sol triggers, the event log is instantly written to EVM execution state and finished.
 
 If you put vm.expectEmit after raffle.enterRaffle(), the event has already happened and passed before Foundry was told to listen for it!
+
+
+Purpose: 
+Acts like an assert. It tells Foundry: "Hey, check if the upcoming function call emits this exact event."  
+
+ How it works: 
+ You emit the expected event yourself in the test right after calling vm.expectEmit. Foundry intercepts the next transaction (enterRaffle) and passes if the logs match.  
+ '
+  When to use:
+   When you just want to test if an event was emitted with the right parameters.  
 
  */
 
@@ -291,6 +301,8 @@ entries[1].topics[1] simply translates to:
 
 "Go to the 2nd event recorded (entries[1]), and grab its 1st indexed parameter (topics[1])."
     
+
+
     
      */ 
     
@@ -301,6 +313,33 @@ Raffle.RaffleState raffleState = raffle.getRaffleState();
 assert(uint256(requestId) > 0); // requestId is returned as a bytes32 datatype, which is a raw 32-byte (256-bit) hexadecimal byte array.
 assert(uint256(raffleState) == 1);
 
+
+/*
+Purpose:
+ Acts like a log recorder/listener.  
+
+ How it works:
+ vm.recordLogs() starts recording all logs emitted on the EVM.  
+  You trigger performUpKeep("").   vm.getRecordedLogs() fetches all recorded log entries into an array (entries).   You extract specific indexed arguments (e.g., entries[1].topics[1] for requestId).  
+   
+   When to use:
+    When you need to grab an unknown/dynamically generated value (like a Chainlink VRF requestId or a newly minted tokenId) from an event log so you can pass it into the next line of your test (e.g., calling vrfCoordinator.fulfillRandomWords(requestId, ...)).   
+
+
+
+ */
+
+}
+
+
+/* FULFILL RANDOM WORDS TEST */
+// fulfill random words can only be called after performUpkeep
+
+
+function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep() public raffleEntered{
+    //Arrange / Act / Assert
+    vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
+    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(0 , address(raffle));
 
 }
 
