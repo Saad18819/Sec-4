@@ -333,16 +333,46 @@ Purpose:
 
 
 /* FULFILL RANDOM WORDS TEST */
-// fulfill random words can only be called after performUpkeep
+// fulfill random words can only be called after performUpkeep was called coz u need requestId
 
-
-function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep() public raffleEntered{
+// STATELESS FUZZ TEST
+function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId) public raffleEntered{
     //Arrange / Act / Assert
     vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
+    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
+
+/*
+ vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
     VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(0 , address(raffle));
 
-}
 
+ vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
+    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(1 , address(raffle));
+
+   so every random number u put in test will pass so this is defo not a good method so we gonna write a fuzz test or stateless fuzz testing
+so basically u gonna put an requestId input onstead of numbers
+   
+   so here basically while testing we are acting like chainlink and doing the job of requesting fulfillrandomwords thats why we are importing vrfcoordinator mock folder bcz its a mock  
+   coz above thing other than chainlink or other node service can do it
+   link nobody can call the fiulfillrandom words only chainlink nodes can actually call this function
+    */
+
+}
+/*
+LEARNING
+
+in vrfcoordinatormock they have fulfillrandomwords function and in that we have revert InvalidRequest() thing which tells u gotta have requestId thing else its jusst gonna revert
+and thats what exactlty we gonna test that revert
+make sure to import vrfcoordinator mock file as well in here
+
+
+in terminal after running a forge test we got this
+
+[PASS] testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256) (runs: 256, μ: 82376, ~: 82376)
+
+here runs 256 means the fuzz testing had tried 256 different random numbers to make sure it fails so this is definitely a very very good testing 
+and in foundry.toml make sure to set the runs 
+ */
 
 }
 
