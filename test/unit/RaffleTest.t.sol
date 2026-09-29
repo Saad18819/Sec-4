@@ -340,8 +340,12 @@ function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomR
     //Arrange / Act / Assert
     vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
     VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
-
+}
 /*
+
+LEARNING
+
+
  vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
     VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(0 , address(raffle));
 
@@ -355,11 +359,7 @@ so basically u gonna put an requestId input onstead of numbers
    so here basically while testing we are acting like chainlink and doing the job of requesting fulfillrandomwords thats why we are importing vrfcoordinator mock folder bcz its a mock  
    coz above thing other than chainlink or other node service can do it
    link nobody can call the fiulfillrandom words only chainlink nodes can actually call this function
-    */
-
-}
-/*
-LEARNING
+    
 
 in vrfcoordinatormock they have fulfillrandomwords function and in that we have revert InvalidRequest() thing which tells u gotta have requestId thing else its jusst gonna revert
 and thats what exactlty we gonna test that revert
@@ -372,6 +372,44 @@ in terminal after running a forge test we got this
 
 here runs 256 means the fuzz testing had tried 256 different random numbers to make sure it fails so this is definitely a very very good testing 
 and in foundry.toml make sure to set the runs 
+
+
+
+What is Fuzz Testing?
+Standard unit tests use fixed/hardcoded values (like 0 or 1). If your code works for 0 and 1, you haven't proven it works for 999999 or type(uint256).max.
+
+Fuzz testing automates this: instead of hardcoding values, you pass parameters into your test function (like uint256 randomRequestId). Foundry automatically generates hundreds of random inputs (e.g., 0, 12345, 2**256 - 1, etc.) and runs your test against all of them in a single execution to see if any input breaks your code.
+
+Stateless Fuzz Testing: Each fuzz run resets the EVM state back to initial conditions before testing the next generated input.
+
+
+
+What You Are Actually Testing
+You are testing security and access control on the Chainlink VRF Coordinator Mock.
+
+Specifically, you want to make sure that nobody can cheat or complete a raffle cycle by guessing or passing a fake requestId before performUpkeep has actually requested randomness.
+
+Which Error Are We Testing?
+You are testing for the InvalidRequest error inside the VRFCoordinatorV2_5Mock contract.
+
+In the VRF Mock (and real Chainlink VRF Coordinator), when performUpkeep is called, it creates a request and saves that requestId internally in a mapping.
+
+If someone tries to call fulfillRandomWords(requestId, consumer) using a requestId that was never registered in the Coordinator:
+It reverts with VRFCoordinatorV2_5Mock.InvalidRequest.selector
+Here we are  testing using the Mock Coordinator instead of live Chainlink
+
+
+CODEBASE EXPLANATION:
+
+uint256 randomRequestId: Foundry sees this argument and generates a vast range of random numbers to test fulfillRandomWords against every imaginable request ID.
+
+raffleEntered: A modifier setting up the base state (e.g., a player enters the raffle).
+
+vm.expectRevert(...): Asserts that calling fulfillRandomWords without first triggering performUpkeep (which registers a real request ID with the VRF coordinator) must revert.
+
+VRFCoordinatorV2_5Mock(...).fulfillRandomWords(...): Mimics Chainlink VRF attempting to deliver random numbers to your Raffle contract.
+
+The Verdict: If someone (or Chainlink) tries to fulfill a randomRequestId before performUpkeep has officially registered that request, the VRF Coordinator will revert with InvalidRequest across all possible request IDs.
  */
 
 }
