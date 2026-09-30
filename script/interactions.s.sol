@@ -50,7 +50,8 @@ uint256 public constant FUND_AMOUNT = 3 ether;// 3 LINKS coz link also have this
 address vrfcoordinator = helperConfig.getConfig().vrfCoordinator;
 uint256 subscriptionId = helperConfig.getConfig().subscriptionId;
 address linkToken = helperConfig.getConfig().link;
-fundSubscription(vrfcoordinator,subscriptionId,linkToken);
+address account = helperConfig.getConfig().account;
+fundSubscription(vrfcoordinator,subscriptionId,linkToken, account);
 }
 
 function fundSubscription(address vrfCoordinator , uint256 subscriptionId , address linkToken , address account) public{
@@ -64,7 +65,7 @@ if(block.chainid == LOCAL_CHAIN_ID ){
 vm.stopBroadcast();
 
 }else{
- vm.startBroadcast();
+ vm.startBroadcast(account);
  LinkToken(linkToken).transferAndCall(vrfCoordinator, FUND_AMOUNT , abi.encode(subscriptionId));
  /*linkToken: The address of the live, real LINK token contract on Sepolia.
 
@@ -160,16 +161,17 @@ so always make sure to write the correct contract type
     HelperConfig helperConfig = new HelperConfig();
     uint256 subId = helperConfig.getConfig().subscriptionId;
     address vrfCoordinator = helperConfig.getConfig().vrfCoordinator;
-addConsumer(mostRecentDeployed,vrfCoordinator,subId);
+    address account = helperConfig.getConfig().account;
+addConsumer(mostRecentDeployed,vrfCoordinator,subId , account);
   }
 
 
-  function addConsumer(address contractToAddtoVrf, address vrfCoordinator , uint256 subId) public{
+  function addConsumer(address contractToAddtoVrf, address vrfCoordinator , uint256 subId , address account) public{
 console.log("Adding consumer contract:",contractToAddtoVrf);
 console.log("To vrfCoordinator:",vrfCoordinator);
 console.log("On ChainId:",block.chainid);
 
-vm.startBroadcast();
+vm.startBroadcast(account);
 VRFCoordinatorV2_5Mock(vrfCoordinator).addConsumer(subId,contractToAddtoVrf); // this function is present in SubscriptionApi file
 vm.stopBroadcast();
 // contractToAddtoVrf means deployed contract ka address
