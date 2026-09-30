@@ -393,7 +393,7 @@ function getRecentWinner() external view returns(address){
 return s_recentWinner;
 }
 
-
+}
 
 /*
 LEARNING

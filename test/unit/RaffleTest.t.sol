@@ -339,7 +339,7 @@ Purpose:
 function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId) public raffleEntered{
     //Arrange / Act / Assert
     vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
-    VRFCoordinatorV2_5Mock(address(raffle.getVrfCoordinator())).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
+    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
 }
 /*
 
@@ -447,7 +447,7 @@ console.logBytes32(entries[1].topics[1]);
 
     bytes32 requestId = entries[1].topics[1];
     console.log("Parsed Request ID:", uint256(requestId));
-    VRFCoordinatorV2_5Mock().fulfillRandomWords(uint256(requestId) , address(raffle));
+    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(uint256(requestId) , address(raffle));
     //the above line shld give random num to our raffle and the fulfillrandomWords function is present vrfcoordinator mock
 
 
@@ -479,7 +479,7 @@ STEPS
 2.do forge coverage to check how much percent you have did
 3."forge coverage --report debug > coverage.txt"
 The above command will create a file called coverage.txt, containing the specific lines of code that have not been covered yet.
-
+4. make a .env file and add sepolia ka RPC URL
  */
 
 /*
