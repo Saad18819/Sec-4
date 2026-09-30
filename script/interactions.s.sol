@@ -12,18 +12,19 @@ function CreateSubscriptionUsingConfig() public returns(uint256,address){
     
     HelperConfig helperConfig = new HelperConfig();
 address vrfcoordinator = helperConfig.getConfig().vrfCoordinator;
-(uint256 subId,) = createSubscription(vrfcoordinator);
+address account = helperConfig.getConfig().account;
+(uint256 subId,) = createSubscription(vrfcoordinator , account);
 return (subId , vrfcoordinator);
 
 
 }
 
-function createSubscription(address vrfCoordinator)public returns(uint256,address){
+function createSubscription(address vrfCoordinator , address account )public returns(uint256,address){
 
 console.log("Creating subscription on chainID:",block.chainid);
 
 
-vm.startBroadcast();
+vm.startBroadcast(account);
 uint256 subId = VRFCoordinatorV2_5Mock(vrfCoordinator).createSubscription(); // here createSubscription function aint same jo uppar likha hai its the function present in vrfcoordinatomock.sol vali file and mock _5 vali me inherit hora
 vm.stopBroadcast();
 
@@ -52,13 +53,13 @@ address linkToken = helperConfig.getConfig().link;
 fundSubscription(vrfcoordinator,subscriptionId,linkToken);
 }
 
-function fundSubscription(address vrfCoordinator , uint256 subscriptionId , address linkToken) public{
+function fundSubscription(address vrfCoordinator , uint256 subscriptionId , address linkToken , address account) public{
 console.log("Funding subscription:",subscriptionId);
 console.log("Using vrfCoordinator:",vrfCoordinator);
 console.log("On ChainId:",block.chainid);
 
 if(block.chainid == LOCAL_CHAIN_ID ){
-  vm.startBroadcast();
+  vm.startBroadcast(); // local chain id so it doesnt matter much abt config.account thing
   VRFCoordinatorV2_5Mock(vrfCoordinator).fundSubscription(subscriptionId , FUND_AMOUNT * 100); // coz when we ran the test with just Fund_AMOUNT we were getting the error of insufficient balance so we multiplied it by 100 to make it work
 vm.stopBroadcast();
 
