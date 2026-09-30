@@ -394,7 +394,6 @@ return s_recentWinner;
 }
 
 
-}
 
 /*
 LEARNING

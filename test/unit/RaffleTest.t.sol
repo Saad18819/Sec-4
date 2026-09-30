@@ -339,7 +339,7 @@ Purpose:
 function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId) public raffleEntered{
     //Arrange / Act / Assert
     vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
-    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
+    VRFCoordinatorV2_5Mock(address(raffle.getVrfCoordinator())).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
 }
 /*
 
@@ -423,7 +423,8 @@ function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney() public raffleEn
     uint256 additionalEntrants = 3; // 4 total
     uint256 startingIndex = 1;
 address expectedWinner = address(1);
-
+// generally vrfcoordinator generally generates 777 as random number and to select a winner we do randomnum % no of player so here its 777 % 4 so 1 will be the winner 
+// but this thing will only work when testing locally real VRF returns actual cryptographic randomness
 
     for(uint256 i = startingIndex ; i<(startingIndex + additionalEntrants);i++){
         address newPlayer = address(uint160(i));
@@ -433,7 +434,7 @@ address expectedWinner = address(1);
 uint256 startingTimeStamp = raffle.getLastTimeStamp();
 uint256 winnerStartingBalance = expectedWinner.balance;
 
-// Act  (we want the request id so that is how we generate it )
+// Act  (we want the request id so this is how we generate it )
 
 
 vm.recordLogs(); 
@@ -446,7 +447,7 @@ console.logBytes32(entries[1].topics[1]);
 
     bytes32 requestId = entries[1].topics[1];
     console.log("Parsed Request ID:", uint256(requestId));
-    VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(uint256(requestId) , address(raffle));
+    VRFCoordinatorV2_5Mock().fulfillRandomWords(uint256(requestId) , address(raffle));
     //the above line shld give random num to our raffle and the fulfillrandomWords function is present vrfcoordinator mock
 
 
@@ -459,7 +460,7 @@ uint256 endingTimeStamp = raffle.getLastTimeStamp();
 uint256 prize = entranceFee * (additionalEntrants + 1);
 
 assert(recentWinner == expectedWinner);
-assert(uint256(rState )==0);
+assert(uint256(rState)==0);
 assert(winnerBalance == winnerStartingBalance + prize);
 assert(endingTimeStamp > startingTimeStamp);
 }
