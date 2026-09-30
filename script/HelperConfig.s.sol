@@ -44,6 +44,7 @@ contract HelperConfig is CodeConstants, Script{
         uint256 subscriptionId;
         uint32 callbackGasLimit;
         address link;
+        address account; // we adding this for the sake of making our codebase work for both anvil and other live network as well
     }
 
 /*
@@ -105,8 +106,8 @@ vrfCoordinator:0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625, // gotta search it up
 gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae, // same as above
 callbackGasLimit:500000,// 500,000 gas
 subscriptionId: 0,
-link:0x779877A7B0D9E8603169DdbD7836e478b4624789 // // gotta search it up on chainlink vrf supported network site and this is link token deployed smart contract logic address
-
+link:0x779877A7B0D9E8603169DdbD7836e478b4624789, // // gotta search it up on chainlink vrf supported network site and this is link token deployed smart contract logic address
+account:0xc9DDba2c60cB6fA96e57A713D3d5348224d325C8 // metamask account 1 address
 
        });
 
@@ -141,7 +142,8 @@ vrfCoordinator:address(vrfCoordinatorMock),
 gasLane:0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae, // same as above
 callbackGasLimit:500000,// 500,000 gas
 subscriptionId: 0,
-link:address(linkToken)
+link:address(linkToken),
+account:
 });
 
 return localNetworkConfig;
