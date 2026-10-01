@@ -1,0 +1,18 @@
+-include .env
+# it will pull all the data from the .env file and include it here
+
+.PHONY: all test deploy
+# .PHONY is a target used to tell make that the listed targets are commands, not real files or directories on your system.
+
+build :; forge build
+# :;  this sign shows that its a target 
+
+# method 2 (jot it down on a next line)
+
+test:
+forge test
+
+install:;forge install cyfrin/foundry-devops@0.2.2 && forge install smartcontractkit/chainlink-brownie-contracts@1.1.1 && forge install foundry-rs/forge-std@v1.8.2 && forge install transmissions11/solmate@v6
+# here && means eveerything will be installed 
+
+deploy :; 
