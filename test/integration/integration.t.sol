@@ -1,3 +1,4 @@
 // unit test: u write for each conditions isolately and test it
 // integration test : u actually test the scripts if they are integrating or not
-// staging test: 
+// staging test: A staging test (or Testnet Integration Test) involves deploying your actual smart contracts to a live public test network (like Sepolia, Holesky, or Amoy) and running end-to-end interactions on that network.
+// forked test: A forked test is a local simulation that fetches and copies the real state of a live blockchain (like Ethereum Mainnet, Arbitrum, or Sepolia) at a specific block number, running it inside your local test environment (Anvil/Hardhat).
