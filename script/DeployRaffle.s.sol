@@ -25,11 +25,11 @@ HelperConfig.NetworkConfig memory config = helperconfig.getConfig();
 if(config.subscriptionId==0){
     // create subscription
 CreateSubscription  createSubs = new CreateSubscription();
-   (config.subscriptionId , config.vrfCoordinator) = createSubs.createSubscription(config.vrfCoordinator);
+   (config.subscriptionId , config.vrfCoordinator) = createSubs.createSubscription(config.vrfCoordinator , config.account);
 
 // Fund It
 FundSubscription fundSubscription = new FundSubscription();
-fundSubscription.fundSubscription(config.vrfCoordinator ,config.subscriptionId,config.link);
+fundSubscription.fundSubscription(config.vrfCoordinator ,config.subscriptionId,config.link , config.account);
 
 
 }
@@ -51,7 +51,7 @@ First we need to deploy a contract and then gotta add a consumer coz to add cons
 also u dont need to broadcast coz broadcast toh interaction me kar diya tha already
  */
 AddConsumer addConsumer = new AddConsumer();
-addConsumer.addConsumer(address(raffle),config.vrfCoordinator, config.subscriptionId);
+addConsumer.addConsumer(address(raffle),config.vrfCoordinator, config.subscriptionId , config.account);
 return (raffle, helperconfig);
 
 }

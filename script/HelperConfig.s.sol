@@ -44,7 +44,7 @@ contract HelperConfig is CodeConstants, Script{
         uint256 subscriptionId;
         uint32 callbackGasLimit;
         address link;
-        address account; // we adding this for the sake of making our codebase work for both anvil and other live network as well
+        address account; // we adding this for the sake of making our codebase work for both anvil and other live network as well basically making it dynamic for forked test and local chain as well
     }
 
 /*

@@ -5,12 +5,14 @@ pragma solidity 0.8.19;
 import {Test} from "forge-std/Test.sol";
 import {DeployRaffle} from "../../script/DeployRaffle.s.sol";
 import {Raffle} from "src/Raffle.sol";
-import {HelperConfig} from "script/HelperConfig.s.sol";
+import {HelperConfig , CodeConstants} from "script/HelperConfig.s.sol";
 import {Vm} from "forge-std/Vm.sol"; // u are exporting this for VM.Log thing
 import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
 import {console} from "forge-std/console.sol";
 
-contract Raffletest is Test{
+
+
+contract Raffletest is CodeConstants,Test{
     Raffle public raffle;
     HelperConfig public helperConfig;
 
@@ -335,8 +337,16 @@ Purpose:
 /* FULFILL RANDOM WORDS TEST */
 // fulfill random words can only be called after performUpkeep was called coz u need requestId
 
+modifier skipFork(){
+    if(block.chainid != LOCAL_CHAIN_ID){
+        return ;
+    }
+    _;
+}
+
+
 // STATELESS FUZZ TEST
-function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId) public raffleEntered{
+function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId) public raffleEntered skipFork{
     //Arrange / Act / Assert
     vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
     VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
@@ -418,7 +428,7 @@ The Verdict: If someone (or Chainlink) tries to fulfill a randomRequestId before
 
 // FINAL GIANT TEST(end-to-end test which will be a baseline for integration test as well)
 
-function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney() public raffleEntered{
+function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney() public raffleEntered skipFork{
     // Arrange
     uint256 additionalEntrants = 3; // 4 total
     uint256 startingIndex = 1;
@@ -468,7 +478,7 @@ assert(endingTimeStamp > startingTimeStamp);
 
 }
 
-
+// 9:36
 
 
 
@@ -512,6 +522,47 @@ Set up the test environment and preconditions. (e.g., set up who the caller is, 
   In your code, assert(playerRecorded == PLAYER) checks if the contract correctly saved the player's address in storage.
 
 
+
+
+
+HOW YOU MAKE SURE TO RUN THIS UNIT TEST IN FORKED ENVIRONMENT
+1 in struct of helperconfig add an account section and also add those in function returning config things
+2 and then in deployRaffle,helperconfig,interactions jaha pe bhi vm.startBroadcast hai then pass the parameter of account thing
+3.make sure to get repolia rpc url from alchemy and then do source .env
+4.do forge build and then forge test --fork-url $SEPOLIA_RPC_URL 
+5.but you will realise 2 test always gonna fail on a fork test
+A.  function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney()
+B.  function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId)
+these test gonna fail always coz we are mocking, we are pretending to be chainlink vrf coordinator and obv its gonnal fail coz the actual chainlink coordinator have access controls and only let the chainlink nodes can call fulfill random words
+so what we gonna do is we wil create a modifier skipFork
+6.then do forge test and all and then forge coverage as well
+
+
+EXPLANATION OF ABOVE THING
+
+Why vm.startBroadcast with an Account?
+
+Local Anvil Node: By default, Foundry uses address(0) or the first default Anvil key 
+when you run tests locally. It mints infinite local ETH to simulate transactions.
+
+Forked / Live Network: When you pass --fork-url, standard test scripts often fail if vm.startBroadcast() is called without specifying who is sending the transaction. 
+On a fork, Foundry needs an actual address (with funds/keys or explicit prank/account impersonation) to sign the deployment and function calls properly. 
+Adding an account to your HelperConfig ensures Foundry explicitly executes transactions from a valid, recognized actor.
+
+
+2. Why do 2 tests fail on a Forked Network?
+
+When testing locally (Chain ID 31337), your code deploys a VRFCoordinatorV2Mock (or VRFCoordinatorV2_5Mock).
+
+Local Behavior: The mock contract lets your test script manually trigger subscription funding and call fulfillRandomWords(...) directly to simulate the Chainlink node returning a random number.
+
+Forked/Live Network Behavior: When forking (e.g., Sepolia/Mainnet), your code targets the actual Chainlink VRF Coordinator contract address on that chain instead of deploying a local mock.
+
+The Real Coordinator Constraints:
+
+On a real network, fulfillRandomWords can only be called by the official Chainlink VRF off-chain node (which holds special permission keys on the coordinator contract).
+
+When your unit test tries to simulate or force fulfillRandomWords directly on a forked real coordinator, the transaction reverts because you are not the Chainlink off-chain node.
 
 
 
