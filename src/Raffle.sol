@@ -21,7 +21,9 @@ and then the system will generate a random number which will automatically selec
 // make sure to go through this contract once as well
 import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
-
+import {console} from "forge-std/console.sol";
+// we can do console.log directly in our contract themselves to debug the code
+// just make sure to remove console.log and all before deploying to testnet or real network coz why to waste gas on it
 
 
 // in lib smart brownie contract go to src/vrf/dev/VRFConsumerBaseV2Plus.sol this what we are inheriting
@@ -139,6 +141,8 @@ event RequestedRaffleWinner(uint256 indexed requestId);
         // require(msg.value >= i_entranceFee,"Not enough ETH sent");
         // require is gas expenisve coz u storing string so best is to use custom errors
 
+console.log("HELLO!!!");
+console.log(msg.value);
         // another method is using errors and the most gas efficient method
         if (msg.value < i_entranceFee) {
             revert Raffle_SendMoreToEnterRaffle();
