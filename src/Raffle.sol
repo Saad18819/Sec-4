@@ -282,7 +282,7 @@ if(!upKeepNeeded){
 
         s_raffleState = RaffleState.CALCULATING; // so yeah if we get into the process of choosing a winner so we have updated the raffle current situation so now no one else can enter the state
 
-        // CHAINLINK VRF CODE.... basically if u analyse it properly its a struct which is definitely exported from a contract file with the name give below
+        // CHAINLINK VRF CODE.... basically if u analyse it properly its a struct which is definitely exported from a contract file with the name give below its located in dev/lib
 
         VRFV2PlusClient.RandomWordsRequest memory request = VRFV2PlusClient.RandomWordsRequest({
             keyHash: i_keyHash, // max gas price you are willing to pay for a request in wei
