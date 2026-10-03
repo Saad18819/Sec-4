@@ -478,8 +478,6 @@ assert(endingTimeStamp > startingTimeStamp);
 
 }
 
-// 9:36
-
 
 
 
