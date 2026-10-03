@@ -5,6 +5,7 @@ pragma solidity 0.8.19;
 // we will be working with specific sets of contract that works best with 0.8.19
 
 /*
+
 basically the PROJECT IS LIKE A LOTTERY SYSTEM. people gonna buy the tickets or tokens whatever
 and then the system will generate a random number which will automatically selects the winner
 
@@ -27,6 +28,8 @@ import {console} from "forge-std/console.sol";
 
 
 // in lib smart brownie contract go to src/vrf/dev/VRFConsumerBaseV2Plus.sol this what we are inheriting
+// we inherit from VRFConsumerBaseV2Plus so our contract gains the ability to receive random numbers safely, 
+// but you trigger the request using the s_vrfCoordinator contract instance.
 contract Raffle is VRFConsumerBaseV2Plus {
     error Raffle_SendMoreToEnterRaffle();
     error Raffle_TransferFailed();
@@ -85,7 +88,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     uint256 private s_lastTimeStamp; // it cant be set immutable coz it must be updated every lottery round, whenever a new winner is picked the timestamp needs to be updated to reset the timer
     address payable[] private s_players;
     // s implies storage variable and we keeping it storage variable coz people entering ragffle keeps changing so we dont wana make it immutable or constant
-    // payable means see after winning the raffle that address needs to be paid so without oayable u wont be able to pay that address broooo
+    // payable means see after winning the raffle that address needs to be paid so without payable u wont be able to pay that address broooo
     // whenever a contract has to pick someone from storage and push money to them, you need a payable array
     address private s_recentWinner;
     RaffleState private s_raffleState;

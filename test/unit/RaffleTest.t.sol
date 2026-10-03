@@ -568,3 +568,15 @@ When your unit test tries to simulate or force fulfillRandomWords directly on a 
 
 
  */
+
+/*
+FOUNDRY OPCODE DEBUGGER
+
+
+"forge test --debug functionName"
+basically it takes u through the low level bytes of a smart contract basically u get to now what is exactly happening with meory , storage,call data and all that good stuff
+for know just know the method how u do this gonna learn it later in security course 
+
+
+
+ */
