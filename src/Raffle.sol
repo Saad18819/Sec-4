@@ -375,6 +375,15 @@ emit RequestedRaffleWinner(requestId);
     That function verifies that the caller is genuine and in it we have fulfillrandomwords function so it will call
     then executes your internal fulfillRandomWords logic.
 
+    You Request Randomness:
+In your Raffle contract, you call s_vrfCoordinator.requestRandomWords(...). This sends an external transaction/event to Chainlink's off-chain oracle network with your request ID.
+
+The Chainlink Oracle Responds:
+Off-chain Chainlink nodes generate the cryptographically verifiable random numbers and sign a transaction targeting the Chainlink VRF Coordinator contract on-chain.
+
+VRF Coordinator Calls rawFulfillRandomWords:
+and inside raFulflillRandomWords we have fulfillrandomwords function and there its an unimplemented code so thats why here we right the logic
+
 
 
      */

@@ -13,7 +13,7 @@ uint96 public MOCK_GAS_PRICE_LINK = 1e9; // The simulated gas price of the netwo
 int256 public MOCK_WEI_PER_UINT_LINK = 4e15; // The mock conversion rate between ETH and LINK tokens.
 // technical parameters like base fees can theoretically be set to 0 in a test environment, but setting realistic non-zero mock values is intentional:
 
-
+uint256 constant MAINNET_CHAINID = 1;
     uint256 public constant ETH_SEPOLIA_CHAIN_ID = 1115511;
 uint256 public constant LOCAL_CHAIN_ID = 31337;
 }
@@ -70,15 +70,16 @@ so to summarise u generally write all the parameters in the struct which are dep
 
    mapping(uint256 chainId => NetworkConfig config) public networkConfigs;
 
-    constructor(){
-        networkConfigs[ETH_SEPOLIA_CHAIN_ID] = getSepoliaEthConfig();
-
+    constructor() {
+    if (block.chainid == SEPOLIA_CHAINID) {
+        networkConfigs[SEPOLIA_CHAINID] = getSepoliaEthConfig();
+    } else if (block.chainid == MAINNET_CHAINID) {
+        networkConfigs[MAINNET_CHAINID] = getMainnetEthConfig();
     }
+}
 
 
-
-
-function getConfigByChainId(uint256 chainId) public returns (NetworkConfig memory){
+function getConfigByChainId(uint256 chainId) public view returns (NetworkConfig memory){
     if(networkConfigs[chainId].vrfCoordinator != address(0)){
         return networkConfigs[chainId];
     }else if(chainId == LOCAL_CHAIN_ID){
@@ -87,6 +88,7 @@ return getOrCreateAnvilEthCOnfig();
         revert HelperConfig_InvalidChainId();
     } 
 }
+// here we havent written the logic of getsepolia coz in constructor u have already given the condition for its deployment
 
 
 
@@ -116,6 +118,17 @@ account:0xc9DDba2c60cB6fA96e57A713D3d5348224d325C8 // metamask account 1 address
     //  Function declared as pure earlier, but this expression (potentially) reads from the environment or state and also modifies the state thus cant be "view" or "pure"
 
 
+ function getMainnet() public view returns(memory Config){
+        localConfig = Config({
+      entranceFee:5 ether,
+interval:30,
+gasLane:0x88d615f702f69213554d32e012e8e97a221f153ee0d3ea089ea4a3b75a1c0d4a,
+callBackLim:5000,
+vrfCoordinator:0xd7f86b4b8cae7d942340ff628f82735b7a20893a,
+subId:0
+        });
+        return localConfig;
+    } 
 
 
 
