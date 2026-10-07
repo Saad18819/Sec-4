@@ -37,11 +37,20 @@ function run() public{
 CreateSubscriptionUsingConfig();
 }
 
+/*
+I MIGHT HAVE A DOUBT THAT why fking we deploying mockCoordinator when we gonna use sepolia or mainnet as well
+see the thing is the main vrf coordinator file and the mock both has the exact same createSubscription gunction so generally its a practice to deploy mock itself
+and remember that we do not deploy or interact with a mock contract we interact with chainlink actual live VRFcoordinator only
+
+
+ */
+
 
 }
 
 
 contract FundSubscription is Script,CodeConstants{
+  
 uint256 public constant FUND_AMOUNT = 3 ether;// 3 LINKS coz link also have this 18 decimal thing
 
 
