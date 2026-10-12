@@ -130,7 +130,6 @@ and in linktoken we are importing erc 20 solmate something so for that search on
 "forge install URL@version"
 and inside foundry.toml in remappings do
 '@solmate=lib/solmate/src/'
-
 and then import it here in this codebase
 and in helperconfig also make sure to deploy that mock as well 
 . and then u gotta go to Deploy file and then write the logic of  Fund
@@ -205,6 +204,7 @@ ADD CONSUMER LEARNING
 git add .
 git commit -m "fix: updated scripts and tests"
 git push
+
 
  */
 
