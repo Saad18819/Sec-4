@@ -24,6 +24,7 @@ contract Raffletest is CodeConstants,Test{
     event WinnerPicked(address indexed winner);
 
 
+
    uint256 entranceFee;
         uint256 interval;
         address vrfCoordinator;
