@@ -162,7 +162,7 @@ function testDontAllowPlayersToEnterWhileRaffleIsCalculating() public{
     raffle.performUpKeep(""); // this is actually gonna set the enum to calculating
 
     // Act/ Assert
-    vm.expectRevert(Raffle.Raffle_RaffleNotOpen.selector);
+    vm.expectRevert(Raffle.Raffle_RaffleNotOpen.selector); // here u could write raffle.Raffle_RaffleNotOpen.selector both contract name would work fine but the most effective way is writing the original contract name
     vm.prank(PLAYER);
     raffle.enterRaffle{value:entranceFee}();
 
