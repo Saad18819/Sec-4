@@ -354,6 +354,7 @@ function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomR
 }
 /*
 
+test function which takes parameter are automatically treated as Fuzz test so foundry automatically generates a parameter u fking dont have to worrry abt it
 LEARNING
 
 
