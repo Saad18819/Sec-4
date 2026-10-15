@@ -351,6 +351,23 @@ function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomR
     //Arrange / Act / Assert
     vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
     VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(randomRequestId , address(raffle)); // this is a function in vrfmock file
+// VRFCoordinatorV2_5Mock(vrfCoordinator) ==== this is typeCasting brooo  so basically vrfCoordinator is an address okk and that address fking doesnt have any fulfillrandomword function so we cal mock basically 
+// To tell Solidity "Hey, the contract deployed at this address vrfCoordinator is an instance of VRFCoordinatorV2_5Mock so let me call its functions", you wrap the address in the contract's name: 
+/*
+vrfCoordinator ye address hai
+VRFCoordinatorV2_5Mock() ye blueprint hai
+ VRFCoordinatorV2_5Mock(vrfCoordinator) ye instance hai basically the actuall deployed contract 
+ vrfCoordinator is the variable holding the address where that mock contract was deployed.
+
+
+vrf is a real address:
+During test setup, new VRFCoordinatorV2_5Mock() deploys the mock contract onto the test network. vrf holds that deployed contract's actual address.
+You are sending a transaction to that real contract at vrf, calling its fulfillRandomWords function.
+
+
+
+
+ */
 }
 /*
 
