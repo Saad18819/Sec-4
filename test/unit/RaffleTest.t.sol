@@ -365,7 +365,11 @@ During test setup, new VRFCoordinatorV2_5Mock() deploys the mock contract onto t
 You are sending a transaction to that real contract at vrf, calling its fulfillRandomWords function.
 
 
+Inside VRFCoordinatorV2_5Mock.sol, 
+the fulfillRandomWords function checks its internal database (a mapping or state variable) to see if reqId was ever registered via a prior call to requestRandomWords() / performUpkeep().
 
+Since nobody called performUpkeep() first, that reqId does not exist in the mock's memory.
+Because the request ID doesn't exist in its records, the mock contract explicitly throws the InvalidRequest error.
 
  */
 }
