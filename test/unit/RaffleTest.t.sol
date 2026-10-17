@@ -552,7 +552,7 @@ HOW YOU MAKE SURE TO RUN THIS UNIT TEST IN FORKED ENVIRONMENT
 2 and then in deployRaffle,helperconfig,interactions jaha pe bhi vm.startBroadcast hai then pass the parameter of account thing
 3.make sure to get repolia rpc url from alchemy and then do source .env
 4.do forge build and then forge test --fork-url $SEPOLIA_RPC_URL 
-5.but you will realise 2 test always gonna fail on a fork test
+5.but you will realise 2 test always gonna fail on a fork test 
 A.  function testFulfillrandomWordsPicksAWinnerResetsAndSendsMoney()
 B.  function testFulfillrandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId)
 these test gonna fail always coz we are mocking, we are pretending to be chainlink vrf coordinator and obv its gonnal fail coz the actual chainlink coordinator have access controls and only let the chainlink nodes can call fulfill random words
@@ -562,6 +562,7 @@ so what we gonna do is we wil create a modifier skipFork
 
 EXPLANATION OF ABOVE THING
 
+although that was the case for vrfMock but for 2_5 u have to pass account stuff as a pramter even for local testing
 Why vm.startBroadcast with an Account?
 
 Local Anvil Node: By default, Foundry uses address(0) or the first default Anvil key 
@@ -601,4 +602,47 @@ for know just know the method how u do this gonna learn it later in security cou
 
 
 
+ */
+
+
+/*
+WHAT DOES IT MEAN vm.startBroadcast(address account) and why is it necessary in VRF v2.5 stuff
+
+For every transaction executed after this line, 
+format, sign, and broadcast it using address as the transaction's msg.sender and signer
+
+Why VRF v2.5 Fails Without an Explicit Account
+When you call createSubscription() or addConsumer() on VRFCoordinatorV2_5Mock:
+
+If you don't specify account:
+
+createSubscription() gets called with msg.sender = DEFAULT_SENDER (or an unassigned caller).
+
+The mock stores DEFAULT_SENDER as the owner of subId = 1.
+
+Later in your script, when addConsumer(subId, consumer) is called under a different context or account, 
+the mock checks if (msg.sender != s_subscriptionOwners[subId]) revert MustBeSubOwner();.
+The transaction reverts because the caller does not match the stored owner address.
+
+
+
+
+vm.broadcast happens in 3 different ways
+
+
+vm.startBroadcast()	"Sign and send the following calls using whatever default wallet address Foundry has loaded."
+
+vm.startBroadcast(account)	"Switch active caller context to account. Sign and send all following calls with account set as msg.sender."
+
+vm.startBroadcast(privateKey)	"Derive the public address from privateKey, set it as msg.sender, and sign the transactions with this private key."
+
+
+
+so basiaclly this is what happens when u dont provide the account address so
+firstly when u call createSubscription() so vm.startBroadcast() will call using a deault sender address and it will create a subscriptionId =1
+ and then later on when we call FundSubs() so here sub Id 1 does not exist on this contract coz u are again calling helperconfig 
+ 
+ On the same mock: It checks if (msg.sender != s_subscriptionOwners[subId]) revert MustBeSubOwner();. Since msg.sender does not match the original caller stored in Step 1, it reverts due to unauthorized ownership.
+
+On a newly instantiated mock: It fails because subId = 1 was never registered on the new instance.
  */
