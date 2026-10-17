@@ -30,7 +30,8 @@ import {console} from "forge-std/console.sol";
 // in lib smart brownie contract go to src/vrf/dev/VRFConsumerBaseV2Plus.sol this what we are inheriting
 // we inherit from VRFConsumerBaseV2Plus so our contract gains the ability to receive random numbers safely, 
 // but you trigger the request using the s_vrfCoordinator contract instance.
-contract Raffle is VRFConsumerBaseV2Plus {
+contract Raffle is VRFConsumerBaseV2Plus{
+    
     error Raffle_SendMoreToEnterRaffle();
     error Raffle_TransferFailed();
     error Raffle_RaffleNotOpen();
